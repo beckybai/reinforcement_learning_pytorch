@@ -53,19 +53,26 @@ def run_episode(env, qf): # on line algorithm
 	done = False
 	global  steps_done
 	obs = env.reset()
+	obs[0], obs[3] = 5,5
 	# steps_done += 1
 	action_new = qf.select_action(obs,steps_done)
 	reward = 0
+	pending = []
 
 	while not done:
-		if animate:
-			env.render()
+		# if animate:
+			# env.render()
+
 		action = action_new
 		obs_new, rewards, done, _ = env.step(action[0,0])
 		reward += rewards
 		steps_done+=1
 		action_new = qf.select_action(obs_new,steps_done)
-		qf.update(obs,action[0,0],rewards, obs_new,action_new[0,0],done)
+		pending.append([obs,action[0,0],rewards, obs_new,action_new[0,0],done])
+		if len(pending)>=6 or done:
+			qf.update(pending)
+			pending = []
+#		qf.update(obs,action[0,0],rewards, obs_new,action_new[0,0],done)
 		obs = obs_new
 
 	return reward
@@ -86,7 +93,7 @@ def main():
 	env, obs_dim, act_dim = init_gym(env_name)
 	num_episodes = 100
 	rewards = np.zeros(num_episodes)
-	QValue = QFunction(obs_dim, act_dim, learning_rate=0.01,reward_decay = 0.9, e_greedy=0.9)
+	QValue = QFunction(obs_dim, act_dim, learning_rate=0.0001,reward_decay = 0.99, e_greedy=0.9)
 	for i_episode in range(num_episodes):
 		rewards[i_episode] = run_policy(env,QValue,episodes=100)
 		print("In episode {}, the reward is {}".format(str(i_episode),str(rewards[i_episode])))

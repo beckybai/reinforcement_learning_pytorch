@@ -4,13 +4,18 @@ import torch.nn.functional as F
 class QNet(nn.Module):
 	def __init__(self, state_dim, action_dim):
 		super(QNet,self).__init__()
-		self.h1 = 128
+		self.h1 = 32
+		self.h2 = 64
 		self.fc1 = nn.Linear(state_dim,self.h1)
-		self.fc2 = nn.Linear(self.h1, action_dim)
+
+		self.fc2 = nn.Linear(self.h1, self.h2)
+
+		self.fc3 = nn.Linear(self.h2, action_dim)
 
 
 	def forward(self,x):
 		y = F.relu(self.fc1(x))
-		y = F.sigmoid(self.fc2(y))
+		y = F.relu(self.fc2(y))
+		y = self.fc3(y)
 		return y
 

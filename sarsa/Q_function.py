@@ -9,7 +9,7 @@ import util
 import torch.optim as optim
 
 class QFunction(object):
-	def __init__(self, state_dim, action_dim, learning_rate=0.001,reward_decay = 0.9, e_greedy=0.9):
+	def __init__(self, state_dim, action_dim, learning_rate=0.001,reward_decay = 0.99, e_greedy=0.9):
 		self.action_dim = action_dim
 		self.state_dim = state_dim
 		self.lr = learning_rate
@@ -17,10 +17,10 @@ class QFunction(object):
 		self.epsilon = e_greedy
 		self.EPS_START = 0.9
 		self.EPS_END = 0.05
-		self.EPS_DECAY = 10000
+		self.EPS_DECAY = 100000
 
 		self.model = QNet(self.state_dim, self.action_dim)
-		self.optimzer = optim.RMSprop(self.model.parameters())
+		self.optimzer = optim.Adam(self.model.parameters(),lr=self.lr)
 		util.weights_init(self.model)
 
 	def sbc(self,v,volatile=False):
@@ -44,16 +44,21 @@ class QFunction(object):
 		else:
 			return torch.LongTensor([[random.randrange(self.action_dim)]])
 
-	def update(self, s, a, r, s_, a_,done=False):
-		if(done==True):
-			expect_state_action_value = r
-		else:
-			non_final_next_states = self.model(Variable(torch.from_numpy(np.expand_dims(s_,0).astype('float32')),volatile=True))
-			expect_state_action_value = r + self.gamma*non_final_next_states.max(1)[0]
-			expect_state_action_value.volatile=False
-		# expect_state_action_value = r + self.gamma*self.model(Variable(torch.from_numpy(np.expand_dims(s_,0).astype('float32')))).max(1)[0]
-		state_action_value = self.model(self.sbc(s)).max(1)[0]
-		loss = -0.5*(state_action_value - expect_state_action_value).pow(2)
+	def update(self, pending):#	def update(self, s, a, r, s_, a_,done=False):
+		pending_len = len(pending)
+		loss = 0
+		while(pending_len):
+			pending_len = pending_len -1
+			[s,a,r,s_,a_,done] = pending[pending_len]
+			if(done==True):
+				expect_state_action_value = r
+			else:
+				non_final_next_states = self.model(Variable(torch.from_numpy(np.expand_dims(s_,0).astype('float32')),volatile=True))
+				expect_state_action_value = r + self.gamma*non_final_next_states.max(1)[0]
+				expect_state_action_value.volatile=False
+			# expect_state_action_value = r + self.gamma*self.model(Variable(torch.from_numpy(np.expand_dims(s_,0).astype('float32')))).max(1)[0]
+			state_action_value = self.model(self.sbc(s)).max(1)[0]
+			loss += 0.5*(state_action_value - expect_state_action_value).pow(2)
 		self.optimzer.zero_grad()
 		loss.backward()
 		# loss.backward()
@@ -65,4 +70,4 @@ class QFunction(object):
 		self.model.save_state_dict(name)
 
 	def load_model(self,name):
-            self.model.load_state_dict(name)
+		self.model.load_state_dict(name)
