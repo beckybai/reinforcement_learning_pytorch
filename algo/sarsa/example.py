@@ -1,5 +1,5 @@
 import gym
-from tqdm import tqdm_notebook
+# from tqdm import tqdm_notebook
 import numpy as np
 import matplotlib.pyplot as plt
 import warnings

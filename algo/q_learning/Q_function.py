@@ -1,11 +1,14 @@
+# do not want to say anything else..
+# Attention! This is a deterministic model!!!!
+# mdzz...
 import numpy as np
 import torch
-import QNet
-from QNet import QNet
+import model.QNet
+from model.QNet import QNet
 import random
 from torch.autograd import Variable
 import torch.nn.functional as F
-import util
+from utils import util
 import torch.optim as optim
 
 class QFunction(object):
@@ -17,14 +20,20 @@ class QFunction(object):
 		self.epsilon = e_greedy
 		self.EPS_START = 0.9
 		self.EPS_END = 0.05
-		self.EPS_DECAY = 100000
+		self.EPS_DECAY = 100000 # this decay is to slow. # TO DO: figure out the relationship between the decay and the totoal step.
+		# try to use a good strategy to solve this problem.
+		use_cuda = torch.cuda.is_available()
+		self.LongTensor = torch.cuda.LongTensor if use_cuda else torch.LongTensor
+		self.FloatTensor = torch.cuda.FloatTensor if use_cuda else torch.FloatTensor
+		self.model = QNet(self.state_dim, self.action_dim).cuda() if use_cuda else QNet(self.state_dim, self.action_dim)
 
-		self.model = QNet(self.state_dim, self.action_dim)
 		self.optimzer = optim.Adam(self.model.parameters(),lr=self.lr)
+		self.scheduler = optim.StepLR(self.optimizer, step_size=10000, gamma=0.5) # the learning rate decrease by a factor gamma every 10000 step_size.
+
 		util.weights_init(self.model)
 
 	def sbc(self,v,volatile=False):
-		return Variable(torch.FloatTensor(torch.from_numpy(np.expand_dims(v,0).astype('float32'))),volatile=volatile)
+		return Variable(self.FloatTensor((np.expand_dims(v,0).tolist())),volatile=volatile)
 
 	def get_actions(self, state):
 		action = self.model(self.sbc(state,volatile=True))
@@ -42,7 +51,7 @@ class QFunction(object):
 			action = actions.data.max(1)[1].view(1, 1)
 			return action
 		else:
-			return torch.LongTensor([[random.randrange(self.action_dim)]])
+			return self.LongTensor([[random.randrange(self.action_dim)]])
 
 	def update(self, pending):#	def update(self, s, a, r, s_, a_,done=False):
 		pending_len = len(pending)
@@ -53,7 +62,7 @@ class QFunction(object):
 			if(done==True):
 				expect_state_action_value = r
 			else:
-				non_final_next_states = self.model(Variable(torch.from_numpy(np.expand_dims(s_,0).astype('float32')),volatile=True))
+				non_final_next_states = self.model(self.sbc(s_,volatile=True))
 				expect_state_action_value = r + self.gamma*non_final_next_states.max(1)[0]
 				expect_state_action_value.volatile=False
 			# expect_state_action_value = r + self.gamma*self.model(Variable(torch.from_numpy(np.expand_dims(s_,0).astype('float32')))).max(1)[0]
