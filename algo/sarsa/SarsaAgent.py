@@ -1,6 +1,3 @@
-# do not want to say anything else..
-# Attention! This is a deterministic model!!!!
-# mdzz...
 import numpy as np
 import torch
 import model.QNet
@@ -11,7 +8,7 @@ import torch.nn.functional as F
 from utils import util
 import torch.optim as optim
 
-class QFunction(object):
+class SarsaAgent(object):
 	def __init__(self, state_dim, action_dim, learning_rate=0.001,reward_decay = 0.99, e_greedy=0.9):
 		self.action_dim = action_dim
 		self.state_dim = state_dim
@@ -27,8 +24,8 @@ class QFunction(object):
 		self.FloatTensor = torch.cuda.FloatTensor if use_cuda else torch.FloatTensor
 		self.model = QNet(self.state_dim, self.action_dim).cuda() if use_cuda else QNet(self.state_dim, self.action_dim)
 
-		self.optimzer = optim.Adam(self.model.parameters(),lr=self.lr)
-		self.scheduler = optim.StepLR(self.optimizer, step_size=10000, gamma=0.5) # the learning rate decrease by a factor gamma every 10000 step_size.
+		self.optimizer = optim.Adam(self.model.parameters(),lr=self.lr)
+		# self.scheduler = optim.lr_scheduler.StepLR(self.optimizer, step_size=10000, gamma=0.5) # the learning rate decrease by a factor gamma every 10000 step_size.
 
 		util.weights_init(self.model)
 
@@ -41,6 +38,7 @@ class QFunction(object):
 
 
 	def select_action(self, state,steps_done):
+		util.adjust_learning_rate(self.optimizer, self.lr, steps_done, 10000)
 		# global steps_done
 		sample = random.random()
 		esp_threshold = self.EPS_END + (self.EPS_START - self.EPS_END) * \
@@ -63,17 +61,17 @@ class QFunction(object):
 				expect_state_action_value = r
 			else:
 				non_final_next_states = self.model(self.sbc(s_,volatile=True))
-				expect_state_action_value = r + self.gamma*non_final_next_states.max(1)[0]
+				expect_state_action_value = r + self.gamma*non_final_next_states[0,a_]
 				expect_state_action_value.volatile=False
 			# expect_state_action_value = r + self.gamma*self.model(Variable(torch.from_numpy(np.expand_dims(s_,0).astype('float32')))).max(1)[0]
-			state_action_value = self.model(self.sbc(s)).max(1)[0]
+			state_action_value = self.model(self.sbc(s))[0,a]
 			loss += 0.5*(state_action_value - expect_state_action_value).pow(2)
-		self.optimzer.zero_grad()
+		self.optimizer.zero_grad()
 		loss.backward()
 		# loss.backward()
 		# for param in self.model.parameters():
 		# 	param.grad.data.clamp_(-1,1)
-		self.optimzer.step()
+		self.optimizer.step()
 
 	def save_model(self,name):
 		self.model.save_state_dict(name)
