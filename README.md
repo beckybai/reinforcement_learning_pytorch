@@ -3,14 +3,15 @@ some basic implementations of algorithms in reinforcement learning in pytorch.
 
 
 
-##Submit Dairy
----20171120---1
+## Submit Dairy
+
+---20171120---
 
 try to use a q-function &  td-learning to do this task. 
 
 FAILED.
 
----20171120---2
+---20171120---
 
 solve the sarsa problem in some way.
 A trick use here: sarsa is an online algorithm. Everytime when we update the parameter, a batch only have one sample, which may lead this network to unconvergence.
@@ -43,5 +44,12 @@ The output of a policy netowrk should be softmax...
 Monte Carlo method is much more stable. In fact, I didn't figure out which factor lead to it... policy gradient or MC?
 
 next step is ac and trpo
+
+---20171126---
+
+---20171201---
+
+Finish AC-TD RL(off-line)\\
+much more stable than the former version.
 
 

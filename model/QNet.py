@@ -1,6 +1,14 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
+
+"""
+QTDAgent
+Input:
+	state
+Output:
+	action
+"""
 class QNet(nn.Module):
 	def __init__(self, state_dim, action_dim):
 		super(QNet,self).__init__()
@@ -19,7 +27,15 @@ class QNet(nn.Module):
 		y = self.fc3(y)
 		return y
 
-
+"""
+REINFORCEAgent
+Input: 
+	state
+Output:
+	action
+	(things are different for discrete one and continuous one)
+	For continuous one, the output is directly an action.
+"""
 class QNet_policy(nn.Module):
 	def __init__(self, state_dim, action_dim):
 		super(QNet_policy,self).__init__()

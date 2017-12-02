@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 # import datetime
-from REINFORCEAgent import REINFORCEAgent
+from ACAgent import ACAgent
 # import random
 # from torch.autograd import Variable
 import signal
@@ -19,12 +19,7 @@ is_ipython = 'inline' in matplotlib.get_backend()
 if is_ipython:
 	from IPython import display
 plt.ion()
-# use_cuda = torch.cuda.is_available()
-# FloatTensor = torch.cuda.FloatTensor if use_cuda else torch.FloatTensor
-# DoubleTensor = torch.cuda.DoubleTensor if use_cuda else torch.DoubleTensor
-# LongTensor = torch.cuda.LongTensor if use_cuda else torch.LongTensor
-# ByteTensor = torch.cuda.ByteTensor if use_cuda else torch.ByteTensor
-# Tensor = FloatTensor
+
 
 class GracefulKiller:
 	def __init__(self):
@@ -51,6 +46,7 @@ BATCH_SIZE = 128
 GAMMA = 0.999
 steps_done = 0
 animate = True
+# MAX_STEP = 1000
 
 
 def run_episode(env, qf): # on line algorithm
@@ -63,6 +59,7 @@ def run_episode(env, qf): # on line algorithm
 	reward = 0
 	add_reward = 0
 	pending = []
+	t = 0
 
 	while not done:
 		# if animate:
@@ -81,7 +78,7 @@ def run_episode(env, qf): # on line algorithm
 		action = qf.select_action(obs)
 		obs_new, reward, done, _ = env.step(action)
 		add_reward+=reward
-		qf.trajectory.append({'reward':reward, 'state':obs, 'action':action})
+		qf.trajectory.append({'reward':reward, 'state':obs, 'action':action,'new_state':obs_new})
 		obs = obs_new
 	qf.update()
 
@@ -105,8 +102,7 @@ def main():
 	seed_num = 1
 	torch.cuda.manual_seed(seed_num)
 #	data_dir = '/home/bike/data/mnist/'
-	out_dir = '/home/becky/Git/reinforcement_learning_pytorch/log/REINFORCEMENT_{}/'.format(datetime.now())
-	model_name = "REINFORCE_cart_pole"
+	out_dir = '/home/becky/Git/reinforcement_learning_pytorch/log/AC_MC_{}/'.format(datetime.now())
 	if not os.path.exists(out_dir):
 		os.makedirs(out_dir)
 		shutil.copyfile(sys.argv[0], out_dir + '/REINFORCE_cart_pole.py')
@@ -116,19 +112,18 @@ def main():
 	env, obs_dim, act_dim = init_gym(env_name)
 	num_episodes = 300
 	rewards = np.zeros(num_episodes)
-	QValue = REINFORCEAgent(obs_dim, act_dim, learning_rate=0.0001,reward_decay = 0.99, e_greedy=0.9)
+	QValue = ACAgent(obs_dim, act_dim, critic='TD', learning_rate=0.0001,reward_decay = 0.99, e_greedy=0.9)
 	for i_episode in range(num_episodes):
 		rewards[i_episode] = run_policy(env,QValue,episodes=100)
 		print("In episode {}, the reward is {}".format(str(i_episode),str(rewards[i_episode])))
 		if killer.kill_now:
-			# now = "REINFORCE_v1"
-			QValue.save_model(model_name)
+			now = "AC_TD_v1"
+			QValue.save_model(str(now))
 			break
 
 
 	print('game over!')
-
-	util.before_exit(model=QValue.model,now=model_name, reward=rewards)
+	util.before_exit(model=QValue.model, reward=rewards)
 	env.close()
 	env.render(close=True)
 

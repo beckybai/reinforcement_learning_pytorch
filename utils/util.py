@@ -23,8 +23,8 @@ def adjust_learning_rate(optimizer,lr, epoch,step, lr_decay= 0.5):
         param_group['lr'] = lr
 
 
-def before_exit(model,now,reward):
+def before_exit(model,reward,model_path):
 
-    torch.save(model, "../../log/"+str(now))
+    torch.save(model, model_path+'model.pt')
     # model.save_model(str(now))
-    draw(reward)
+    draw.reward_episode(reward,model_path+'reward.png')
