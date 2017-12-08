@@ -3,6 +3,7 @@ import torch.nn.functional as F
 
 """
 ACAgent: modelV
+ACAgent_con: Critic
 Input:
 	state
 Output:

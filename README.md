@@ -53,3 +53,6 @@ Finish AC-TD RL(off-line)\\
 much more stable than the former version.
 
 
+---20171208---
+
+Trying a new model "pendulum" for several days without a very good result. DDPG seems work, but I need to change the parameter of it to make it work... I don't know why.

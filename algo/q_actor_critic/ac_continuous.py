@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 # import datetime
-from ACAgent import ACAgent
+from ACAgent_con import ACAgent_con
 # import random
 # from torch.autograd import Variable
 import signal
@@ -53,43 +53,32 @@ def run_episode(env, qf): # on line algorithm
 	done = False
 	global  steps_done
 	obs = env.reset()
-	obs[0], obs[3] = 5,5
-	# steps_done += 1
-	# action_new = qf.select_action(obs,steps_done)
-	reward = 0
 	add_reward = 0
 	pending = []
 	t = 0
+	MAX_ITER = 200
 
-	while not done:
+	while( not done) and t<MAX_ITER:
+		t += 1
 		# if animate:
 			# env.render()
-# 		action = action_new
-# 		obs_new, rewards, done, _ = env.step(action[0,0])
-# 		reward += rewards
-# 		steps_done+=1
-# 		action_new = qf.select_action(obs_new,steps_done)
-# 		pending.append([obs,action[0,0],rewards, obs_new,action_new[0,0],done])
-# 		if len(pending)>=6 or done:
-# 			qf.update(pending)
-# 			pending = []
-# #		qf.update(obs,action[0,0],rewards, obs_new,action_new[0,0],done)
-# 		obs = obs_new
 		action = qf.select_action(obs)
-		obs_new, reward, done, _ = env.step(action)
+		action_data = action.data.tolist()[0]
+		obs_new, reward, done, _ = env.step(action_data)
+		reward = reward/10
 		add_reward+=reward
-		qf.trajectory.append({'reward':reward, 'state':obs, 'action':action,'new_state':obs_new})
+		# qf.trajectory.append({'reward':reward, 'state':obs, 'action':action,'new_state':obs_new})
 		obs = obs_new
-	qf.update()
+		qf.update(obs,obs_new,action,reward) # On-Line
 
 	return add_reward
 
 def run_policy(env, qf, episodes):
 	total_steps = 0
 	reward = []
-	for e in range(episodes):
+	for e in range(1):
 		reward.append(run_episode(env,qf))
-		qf.update() # update the policy net
+		# qf.update() # update the policy net
 		qf.clear_trajectory() # clear the old trajectory
 
 	return np.mean(reward)
@@ -97,33 +86,34 @@ def run_policy(env, qf, episodes):
 	# return reward
 
 def main():
-	torch.cuda.set_device(0)
+	torch.cuda.set_device(1)
 	print(torch.cuda.current_device())
 	seed_num = 1
 	torch.cuda.manual_seed(seed_num)
 #	data_dir = '/home/bike/data/mnist/'
-	out_dir = '/home/becky/Git/reinforcement_learning_pytorch/log/AC_MC_{}/'.format(datetime.now())
+	out_dir = '/home/becky/Git/reinforcement_learning_pytorch/log/AC_conti_{}/'.format(datetime.now())
 	if not os.path.exists(out_dir):
 		os.makedirs(out_dir)
-		shutil.copyfile(sys.argv[0], out_dir + '/REINFORCE_cart_pole.py')
+		shutil.copyfile(sys.argv[0], out_dir + '/TD_pendulum_v0.py')
 	sys.stdout = logger.Logger(out_dir)
-	env_name = 'CartPole-v0'
+	env_name = 'Pendulum-v0'
 	killer = GracefulKiller()
 	env, obs_dim, act_dim = init_gym(env_name)
+	max_clip = env.action_space.high[0]
 	num_episodes = 300
 	rewards = np.zeros(num_episodes)
-	QValue = ACAgent(obs_dim, act_dim, critic='TD', learning_rate=0.0001,reward_decay = 0.99, e_greedy=0.9)
+	identity = ACAgent_con(obs_dim, act_dim, max_clip,critic='TD', learning_rate=0.0001,reward_decay = 0.99, e_greedy=0.9)
 	for i_episode in range(num_episodes):
-		rewards[i_episode] = run_policy(env,QValue,episodes=100)
+		rewards[i_episode] = run_policy(env,identity,episodes=100)
 		print("In episode {}, the reward is {}".format(str(i_episode),str(rewards[i_episode])))
 		if killer.kill_now:
-			now = "AC_TD_v1"
-			QValue.save_model(str(now))
+			now = "AC_conti_TD_v0"
+			identity.save_model(str(now))
 			break
 
 
 	print('game over!')
-	util.before_exit(model=QValue.model, reward=rewards)
+	util.before_exit(model=identity.model, reward=rewards)
 	env.close()
 	env.render(close=True)
 
