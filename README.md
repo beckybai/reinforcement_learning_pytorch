@@ -55,4 +55,10 @@ much more stable than the former version.
 
 ---20171208---
 
-Trying a new model "pendulum" for several days without a very good result. DDPG seems work, but I need to change the parameter of it to make it work... I don't know why.
+Trying a new model "pendulum" for several days without a very good result. DDPG seems to be a working model, but I am still busy on tuning the the parameters to make it work...
+
+---20171208v2---
+
+Figure out the problem !
+
+When intilize environment, I use gym.make("name").unwrapped. In this situtaion, the pendulum won't stop util we get to the maximum step. "wrapper" helps us access the inner environment. How it works here is still unclear.

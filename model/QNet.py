@@ -90,8 +90,8 @@ Output:
 class Critic_net_Q(nn.Module):
 	def __init__(self,state_dim, action_dim):
 		super(Critic_net_Q,self).__init__()
-		self.h1 = 128
-		self.h2 = 256
+		self.h1 = 64
+		self.h2 = 128
 		self.fc1_s = nn.Linear(state_dim, self.h1)
 		self.fc2_s = nn.Linear(self.h1, self.h2)
 		self.fc1_a = nn.Linear(action_dim, self.h1)
@@ -125,8 +125,8 @@ Output:
 class Actor_policy(nn.Module):
 	def __init__(self, state_dim, action_dim,action_lim):
 		super(Actor_policy, self).__init__()
-		self.h1 = 256
-		self.h2 = 512
+		self.h1 = 64
+		self.h2 = 128
 		self.limit = action_lim
 		self.fc1 = nn.Linear(state_dim, self.h1)
 		self.fc2 = nn.Linear(self.h1, self.h2)

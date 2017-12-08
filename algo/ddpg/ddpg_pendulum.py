@@ -34,7 +34,8 @@ class GracefulKiller:
 
 # gym parameters
 def init_gym(env_name):
-	env = gym.make(env_name).unwrapped
+	# env = gym.make(env_name).unwrapped   # unwrapped is strange here
+	env = gym.make(env_name)
 	state_dim = env.observation_space.shape[0]
 	disc_flag = len(env.action_space.shape)==0
 	if disc_flag: # discrete action
@@ -51,31 +52,36 @@ animate = True
 # MAX_STEP = 1000
 noise = utils.ActionNoise.OrnsteinUhlenbeckActionNoise(1)
 
+global state
 
 def run_episode(env, qf): # on line algorithm
 	done = False
-	global  steps_done
 	obs = env.reset()
 	add_reward = 0
 	pending = []
 	t = 0
-	MAX_ITER = 300
+	MAX_ITER = 1000
 
 	while( not done) and t<MAX_ITER:
 		t += 1
 		# if animate:
-			# env.render()
-		action = qf.select_action(obs.flatten())
-		action_data = action.cpu().data.numpy().astype('float32') + 2*noise.sample() * env.action_space.high[0] # explotation
+		# env.render()
+		state = np.float32(obs)
+		action_ = qf.select_action(state)
+		action_data = action_.cpu().data.numpy()[0] + 2*noise.sample() # explotation
 		# action_data = action.data.tolist()[0]
-		obs_new, reward, done, _ = env.step(action_data)
-		reward = reward
-		qf.buffer.append([np.float32(obs),np.array(action_data),np.float32(obs_new),reward])
+		action = action_data.astype('float32')
+		observation_new, reward, done, info = env.step(action)
+		# reward = reward
 		add_reward+=reward
 		if(done):
-			obs_new =None
+			new_state = 0*state
+			state = 0*state
+		else:
+			new_state = np.float32(observation_new)
 		# qf.trajectory.append({'reward':reward, 'state':obs, 'action':action,'new_state':obs_new})
-		obs = obs_new
+		qf.buffer.append([np.float32(state),np.array(action_data),np.float32(new_state),reward])
+		obs = observation_new
 		qf.update() # picking data from a batch
 		
 		if done:
@@ -110,11 +116,13 @@ def main():
 	env_name = 'Pendulum-v0'
 	killer = GracefulKiller()
 	env, obs_dim, act_dim = init_gym(env_name)
+	
 	max_clip = env.action_space.high[0]
 	num_episodes = 1000
 	rewards = np.zeros(num_episodes)
 	identity = DDPGAgent.DDPGAgent(obs_dim, act_dim,max_clip,critic='TD', learning_rate=0.001,reward_decay = 0.99, e_greedy=0.9)
 	for i_episode in range(num_episodes):
+		# env.render()
 		rewards[i_episode] = run_policy(env,identity,episodes=100)
 		print("In episode {}, the reward is {}".format(str(i_episode),str(rewards[i_episode])))
 		gc.collect()

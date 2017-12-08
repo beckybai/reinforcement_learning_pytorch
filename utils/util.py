@@ -8,8 +8,8 @@ def weights_init(m):
     if classname.find('Linear') !=-1:
         print('hello i am init')
         size = m.weight.size()
-        fan_out = size[1]
-        fan_in = size[0]
+        fan_out = size[0]
+        fan_in = size[1]
         variance = np.sqrt(1/(fan_in))
         # m.weight.data.normal_(0.0, variance)
 

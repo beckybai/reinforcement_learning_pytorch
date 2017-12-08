@@ -18,27 +18,27 @@ class DDPGAgent():
 
 		self.state_dim = state_dim
 		self.action_dim = action_dim
-		self.lr = learning_rate
+		self.lr = 0.001
 		self.gamma = reward_decay
 		self.FloatTensor = torch.cuda.FloatTensor if self.use_cuda else torch.FloatTensor
 		
 		# critic model
-		# self.critic = QNet.Critic_net_Q(state_dim=state_dim, action_dim=action_dim)
-		self.critic = QNet.Critic(state_dim=state_dim, action_dim=action_dim)
-		# self.target_critic = QNet.Critic_net_Q(state_dim=state_dim, action_dim=action_dim)
-		self.target_critic = QNet.Critic(state_dim=state_dim, action_dim=action_dim)
+		self.critic = QNet.Critic_net_Q(state_dim=state_dim, action_dim=action_dim)
+		# self.critic = QNet.Critic(state_dim=state_dim, action_dim=action_dim)
+		self.target_critic = QNet.Critic_net_Q(state_dim=state_dim, action_dim=action_dim)
+		# self.target_critic = QNet.Critic(state_dim=state_dim, action_dim=action_dim)
 		
 		self.optim_critic = torch.optim.Adam(self.critic.parameters(),self.lr)
-		# self.critic.apply(util.weights_init)
+		self.critic.apply(util.weights_init)
 		util.weight_copy(self.critic,self.target_critic)
 	
 		# actor model
-		# self.actor = QNet.Actor_policy(state_dim=state_dim, action_dim=action_dim, action_lim= action_lim)
-		self.actor = QNet.Actor(state_dim=state_dim, action_dim=action_dim, action_lim= action_lim)
-		# self.target_actor = QNet.Actor_policy(state_dim=state_dim, action_dim=action_dim, action_lim= action_lim)
-		self.target_actor = QNet.Actor(state_dim=state_dim, action_dim=action_dim, action_lim= action_lim)
+		self.actor = QNet.Actor_policy(state_dim=state_dim, action_dim=action_dim, action_lim= action_lim)
+		# self.actor = QNet.Actor(state_dim=state_dim, action_dim=action_dim, action_lim= action_lim)
+		self.target_actor = QNet.Actor_policy(state_dim=state_dim, action_dim=action_dim, action_lim= action_lim)
+		# self.target_actor = QNet.Actor(state_dim=state_dim, action_dim=action_dim, action_lim= action_lim)
 		self.optim_actor = torch.optim.Adam(self.actor.parameters(),self.lr)
-		# self.actor.apply(util.weights_init)
+		self.actor.apply(util.weights_init)
 		util.weight_copy(self.actor, self.target_actor)
 		
 		# cuda
@@ -86,7 +86,7 @@ class DDPGAgent():
 		# 					self.critic(states,actions))
 		
 		# critic_loss = torch.mean(torch.pow(difference,2))
-		predicted = torch.squeeze(rewards + self.sbc(self.gamma)*self.target_critic( next_states,self.target_actor(next_states).detach()).detach())
+		predicted = torch.squeeze(rewards + self.gamma*self.target_critic( next_states,self.target_actor(next_states).detach()).detach())
 		real = torch.squeeze(self.critic(states,actions))
 		critic_loss = F.smooth_l1_loss(real,predicted)
 		self.optim_critic.zero_grad()
