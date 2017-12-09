@@ -62,3 +62,11 @@ Trying a new model "pendulum" for several days without a very good result. DDPG 
 Figure out the problem !
 
 When intilize environment, I use gym.make("name").unwrapped. In this situtaion, the pendulum won't stop util we get to the maximum step. "wrapper" helps us access the inner environment. How it works here is still unclear.
+
+---20171209---
+
+Nothing new.
+
+Spend the whole day to understand TRPO. Although I have read the paper two times before, I still didn't figure out how to compute the fisher-vector product. Prepare to use hessian-vector products. The example code only apply to discrete one. I hope it will work for the continuous one.
+
+Good Luck tomorrow. Hope it will not snow.
