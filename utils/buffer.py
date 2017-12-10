@@ -26,4 +26,8 @@ class MemoryBuffer:
 			self.buffer.append(element)
 			
 			
+	def sample_continuous(self,sample_n):
+		assert sample_n < self.len
+		buffer_list = list(self.buffer)
+		return buffer_list[-1-sample_n:] # get the latest elements. (Just wonder if the random sampling work)
 	

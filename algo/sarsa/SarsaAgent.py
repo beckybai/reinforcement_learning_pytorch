@@ -60,10 +60,10 @@ class SarsaAgent(object):
 			if(done==True):
 				expect_state_action_value = r
 			else:
-				non_final_next_states = self.model(self.sbc(s_,volatile=True))
-				expect_state_action_value = r + self.gamma*non_final_next_states[0,a_]
+				# non_final_next_states = self.model(self.sbc(s_,volatile=True))
+				expect_state_action_value = r +  self.model(self.sbc(s_,volatile=True))[0,a_]
 				expect_state_action_value.volatile=False
-			# expect_state_action_value = r + self.gamma*self.model(Variable(torch.from_numpy(np.expand_dims(s_,0).astype('float32')))).max(1)[0]
+
 			state_action_value = self.model(self.sbc(s))[0,a]
 			loss += 0.5*(state_action_value - expect_state_action_value).pow(2)
 		self.optimizer.zero_grad()

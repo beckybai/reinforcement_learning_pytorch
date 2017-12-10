@@ -149,6 +149,16 @@ def fanin_init(size, fanin=None):
 	v = 1. / np.sqrt(fanin)
 	return torch.Tensor(size).uniform_(-v, v)
 
+
+"""
+DDPGAgent:
+Critic:
+	Input: state, action
+	Output: value
+Actor:
+	Input: state
+	Ouput: probaility of that action
+"""
 class Critic(nn.Module):
 
 	def __init__(self, state_dim, action_dim):
@@ -240,4 +250,35 @@ class Actor(nn.Module):
 		return action
 
 
+"""
+"""
 
+class Policy_trpo(nn.Module):
+	def __init__(self,state_dim, action_dim,action_lim):
+		super(Policy_trpo).__init__()
+		self.state_dim = state_dim
+		self.action_dim = action_dim
+		self.action_lim = action_lim
+
+		self.fc1 = nn.Linear(state_dim,256)
+		self.fc1.weight.data = fanin_init(self.fc1.weight.data.size())
+
+		self.fc2 = nn.Linear(256,128)
+		self.fc2.weight.data = fanin_init(self.fc2.weight.data.size())
+
+		self.fc3 = nn.Linear(128,64)
+		self.fc3.weight.data = fanin_init(self.fc3.weight.data.size())
+
+		self.mean = nn.Linear(64,action_dim)
+		self.mean.weight.data.uniform_(-EPS,EPS)
+		
+		self.variance = nn.Linear(64, action_dim)
+		self.mean.weight.data.uniform_(-EPS,EPS)
+		
+	def forward(self, state):
+		x = F.relu(self.fc1(state))
+		x = F.relu(self.fc2(x))
+		x = F.relu(self.fc3(x))
+		action_mean = F.tanh(self.mean(x))
+		action_std = F.softplus(self.variance(x))
+		return action_mean, action_std

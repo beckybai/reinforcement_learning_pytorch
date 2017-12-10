@@ -79,7 +79,7 @@ class REINFORCEAgent():
 		# can we do many steps together? and add them up....
 		q_value = self.model(self.sbc(states))
 		# q_value = [q_value[i][actions[i]] for i in range(q_value.data.size()[0])]
-		loss = torch.sum(-torch.log((q_value)) * self.sbc(rewards))
+		loss = torch.sum(-torch.log((q_value)) * self.sbc(rewards)) # Using return v_t = \Sigma(gamma^(t) * r_t) as an unbiased sample of Q(s,a)
 
 		self.optimizer.zero_grad()
 		loss.backward()

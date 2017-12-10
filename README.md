@@ -70,3 +70,9 @@ Nothing new.
 Spend the whole day to understand TRPO. Although I have read the paper two times before, I still didn't figure out how to compute the fisher-vector product. Prepare to use hessian-vector products. The example code only apply to discrete one. I hope it will work for the continuous one.
 
 Good Luck tomorrow. Hope it will not snow.
+
+---20171209v2---
+
+Finish the draft version of trpo now.
+
+There is not a good pytorch version of TRPO for the task with continuous action space yet. After understanding every detail of the origin code. I adapted it to a model fitting the task with continuous action space. I will start to debug and write the report tomorrow. 
