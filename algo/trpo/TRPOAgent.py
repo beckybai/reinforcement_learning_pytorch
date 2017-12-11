@@ -1,49 +1,49 @@
 import torch
 import numpy as np
-import torch.optim as optim
 from torch.autograd import Variable
-from model.QNet import ANet_policy
-from model.VNet import VNet
-import model.QNet as QNet
 import model.VNet as VNet
+import model.QNet as QNet
 import utils.util as util
 import utils.buffer as buffer
 import torch.nn.functional as F
 import scipy.stats
 import math
 import copy
-import collections.OrderedDict
+# import collections.OrderedDict
+from collections import OrderedDict
 from functools import reduce
 from operator import mul
 
+
 class TRPOAgent():
+	
 	def __init__(self, state_dim, action_dim, action_lim, critic='TD', learning_rate=0.001, reward_decay=0.99,
 				 e_greedy=0.9):
 		self.use_cuda = torch.cuda.is_available()
 		# self.FloatTensor = torch.FloatTensor.cuda() if self.use_cuda else torch.FloatTensor
 		self.state_dim = state_dim
 		self.action_dim = action_dim
-		self.lr = 0.001
-		self.gamma = reward_decay
+		self.lr = 0.01
+		self.gamma = 0.95
 		self.action_lim = action_lim
 		self.FloatTensor = torch.cuda.FloatTensor if self.use_cuda else torch.FloatTensor
 		
 		# critic model
-		self.critic = QNet.Policy_trpo(state_dim=state_dim, action_dim=action_dim)
-		# self.optim_critic = torch.optim.Adam(self.critic.parameters(), self.lr)
-		self.optim_critic = torch.optim.LBFGS(self.critic.parameters(),lr = learning_rate)
+		self.critic = VNet.VNet(state_dim=state_dim)
+		self.optim_critic = torch.optim.Adam(self.critic.parameters(), self.lr)
+		# self.optim_critic = torch.optim.LBFGS(self.critic.parameters(),lr = learning_rate)
 		self.critic.apply(util.weights_init)
 		
 		# actor model
 		self.actor = QNet.Policy_trpo(state_dim=state_dim, action_dim=action_dim, action_lim=action_lim)
-		self.optim_actor = torch.optim.Adam(self.actor.parameters(), self.lr)
+		# self.optim_actor = torch.optim.Adam(self.actor.parameters(), self.lr)
 		self.actor.apply(util.weights_init)
 		
 		# cuda
 		self.critic = self.critic.cuda() if self.use_cuda else self.critic
-		self.target_critic = self.target_critic.cuda() if self.use_cuda else self.target_critic
+		# self.target_critic = self.target_critic.cuda() if self.use_cuda else self.target_critic
 		self.actor = self.actor.cuda() if self.use_cuda else self.actor
-		self.target_actor = self.target_actor.cuda() if self.use_cuda else self.target_actor
+		# self.target_actor = self.target_actor.cuda() if self.use_cuda else self.target_actor
 		
 		# The buffer of the agent
 		MAX_BUFFER_SIZE = 1000000
@@ -60,7 +60,7 @@ class TRPOAgent():
 		self.max_backtracks = 10
 		
 		# parmaters reconstuction from a vector
-		self.actor_properties = collections.OrderedDict()
+		self.actor_properties = OrderedDict()
 		for k, v in self.actor.state_dict().items():
 			self.actor_properties[k] = v.size()
 			
@@ -78,13 +78,15 @@ class TRPOAgent():
 	def normal_log_density(self,x,mu,std):
 		# Inputs are variables
 		var = std.pow(2)
-		log_density = -(x-mu).pow(2) / (2*var) - 0.5*torch.log(2*math.pi) - torch.log(std)
+		log_density = -(x-mu).pow(2) / (2*var) - 0.5*np.log(2*math.pi) - torch.log(std)
 		return log_density #? log_density.sum(1,keepdim=Ture)
 	
 	
 	def select_action(self, state):
 		# TODO add noise
-		mean_action, std_action = self.actor(self.sbc(state)).detach() # generate the mean and the variance
+		mean_action, std_action = self.actor(self.sbc(state))
+		mean_action = mean_action.detach() # generate the mean and the variance
+		std_action = std_action.detach()
 		actions = torch.normal(mean_action,std_action)
 		# base_action = torch.randn(np.shape(state)[0]) # np.shape(state)[0] is the batch size
 		# actions = torch.clamp(torch.pow(std_action,2)*base_action+mean_action, -self.action_lim,self.action_lim)
@@ -103,7 +105,7 @@ class TRPOAgent():
 		return disrew
 	
 	def flatten_params(self, parameters):
-		return torch.cat([param.view(1,-1) for param in parameters],1) # form a one dimension vector
+		return torch.cat([param.view(1, -1) for param in parameters], 1) # form a one dimension vector
 	
 	def construct_model_from_theta(self, theta):
 		"""
@@ -111,7 +113,7 @@ class TRPOAgent():
 		"""
 		theta = theta.squeeze(0)
 		new_model = copy.deepcopy(self.actor)
-		state_dict = collections.OrderedDict()
+		state_dict = OrderedDict()
 		start_index = 0
 		for k, v in self.actor_properties.items():
 			param_length = reduce(mul, v, 1)
@@ -125,7 +127,10 @@ class TRPOAgent():
 	
 	def model_wrapper(self,model,states): # for simlicity
 		mean,std = model(states)
-		return torch.normal(mean,std)
+		sample_base = Variable(torch.rand([states.data.shape[0],1])).cuda() if self.use_cuda else Variable(torch.rand([states.data.shape[0],1]))
+		sample = std.pow(2)*sample_base+mean
+		sample_prob = self.normal_log_density(sample,mean.detach(),std.detach()) # attention here.
+		return sample_prob
 	
 	def kl_divergence(self, model,states):
 		"""
@@ -140,7 +145,8 @@ class TRPOAgent():
 		
 		# actprob = model(states)
 		# old_actprob = self.actor(states)
-		return torch.sum(old_actprob * torch.log(old_actprob / actprob), 1).mean()
+		print(torch.mean(torch.exp(old_actprob) * (old_actprob - actprob)))
+		return torch.mean(torch.exp(old_actprob) *(old_actprob - actprob))
 	
 	def hessian_vector_product(self, vector,states):
 		"""
@@ -162,12 +168,13 @@ class TRPOAgent():
 			kl_plus.backward()
 			kl_minus.backward()
 			
-			grad_plus = self.calc_grad(model=model_plus)
-			grad_minus = self.calc_grad(model = model_minus)
+			grad_plus = self.calc_grad(model=model_plus).data
+			grad_minus = self.calc_grad(model = model_minus).data
 			# grad_plus = self.flatten_params([param.grad for param in model_plus.parameters()]).data
 			# grad_minus = self.flatten_params([param.grad for param in model_minus.parameters()]).data
 			damping_term = self.cg_damping * vector.data
 			
+			print(vector_norm * ((grad_plus - grad_minus) / (2 * r)) + damping_term)
 			return vector_norm * ((grad_plus - grad_minus) / (2 * r)) + damping_term
 		else:
 			self.actor.zero_grad()
@@ -206,10 +213,10 @@ class TRPOAgent():
 		# if(theta):
 		# 	new_model = self.construct_model_from_theta(theta)
 		mu, std = model(states)
-		prob = self.normal_log_density(actions, mu, std)
+		prob = self.normal_log_density(actions, mu, std).data
 		
 		mu_old, std_old = self.actor(states)
-		prob_old = self.normal_log_density(actions, mu_old, std_old)
+		prob_old = self.normal_log_density(actions, mu_old, std_old).data
 		
 		return -torch.sum(torch.exp(prob - prob_old) * advantage)
 	
@@ -221,7 +228,9 @@ class TRPOAgent():
 			model = self.construct_model_from_theta(theta_new)
 			new_val = self.surrogate_function(states, actions, model, advantage)
 			expected_improve = expected_improve_rate * step_alpha
-			ratio = (new_val - val_now) / expected_improve_rate
+			# if(expected_improve==0):
+			# 	print('Warn! expected_improve is zero!')
+			ratio = (new_val - val_now) / expected_improve
 			if ratio > self.accept_radio:
 				return theta_new
 		return theta_old
@@ -242,14 +251,14 @@ class TRPOAgent():
 			states[i, :], actions[i, :], next_states[i, :], rewards[i], dones[i] \
 				= (sample[0].flatten()), (sample[1].flatten()), \
 				  (sample[2].flatten()), (sample[3]), \
-				  (sample[4].flatten())
+				  (sample[4])
 					
 		states = self.sbc(states, volatile=False)
-		actions = self.sbc(actions)
+		actions = self.sbc(actions) # variable
 		next_states = self.sbc(next_states)
 		discount_rewards = self.sbc(self.discounted_rewards(rewards,dones))
 		"""
-		Train the value network.
+		Train the value network. Update the Critic
 		"""
 		def closure():
 			self.optim_critic.zero_grad()
@@ -257,23 +266,26 @@ class TRPOAgent():
 			loss = F.mse_loss(output, discount_rewards)
 			loss.backward()
 			return loss
-		# loss = F.mse_loss(value,discount_rewards)
-		# self.optim_critic.zero_grad()
-		# loss.backward()
-		self.optim_critic.step(closure)
-		
+		value = self.critic(states)
+		loss = F.mse_loss(value,discount_rewards)
+		self.optim_critic.zero_grad()
+		loss.backward()
+		# self.optim_critic.step(closure)
+		self.optim_critic.step()
 		"""
-		Train the policy network.
+		Train the policy network. Update the Actor
 		"""
 		value = self.critic(states)
 		advantage = discount_rewards - value # same as REINFORCEAgent, we use the discount_rewards to estimate Q(s,a)
-		advantage_norm = (advantage - np.mean(advantage))/(np.std(advantage)+1e-8)
-		
+		advantage_norm = (advantage - torch.mean(advantage))/(torch.std(advantage)+1e-8)
+		print(advantage.mean())
 		mean_action, std_action = self.actor(states)
 		state_probabilities = self.normal_log_density(actions,mean_action,std_action)
-		fixed_probabilities = Variable(state_probabilities.data.clone()).detach()
+		# fixed_probabilities = (state_probabilities.data.clone())
+		fixed_probabilities = state_probabilities.detach()
 		prob_ratio = torch.exp(state_probabilities - fixed_probabilities)
-		surrogate_objective = torch.mean(prob_ratio* advantage_norm)
+		advantage_norm = advantage_norm.detach()
+		surrogate_objective = torch.sum(prob_ratio* advantage_norm)
 		"""
 		Optimization Process
 		maximize_theta g*(\theta - \theta_old)
@@ -292,29 +304,41 @@ class TRPOAgent():
 			
 		"""
 		
-		self.optim_actor.zero_grad()
-		surrogate_objective.backward()
-		g = self.calc_grad(self.actor)
-		step_direction = Variable(torch.from_numpy(self.conjugate_gradient(g,states)))
+		self.actor.zero_grad()
+		surrogate_objective.backward(create_graph=True)
+		g = self.calc_grad(self.actor) # numpy or common vectors
+		# g[g>1]=0
+		step_direction = Variable(torch.from_numpy(self.conjugate_gradient(g,states))).cuda() if self.use_cuda else\
+			Variable(torch.from_numpy(self.conjugate_gradient(g,states)))
 		
 		# self.optim_actor.step()
 		shs = (step_direction.dot(self.hessian_vector_product(step_direction,states))).cpu().data.numpy()
-		step = step_direction*np.sqrt(2*self.delta/shs)
+		if(shs<0):
+			print('Warn! shs is smaller than zero!')
+			return None
+		step = step_direction.data*(np.sqrt(2*self.delta/shs)).astype('float')[0]
 		
-		obj_vale = g.dot(step)
+		obj_vale = g.data.dot(step)
 		
 		if(self.line_search):
-			theta = self.linesearch( self.flatten_params([param.grad for param in self.actor.parameters()]),
-									  step, obj_vale,actions,states,advantage)
-		
+			theta = self.linesearch( self.flatten_params([param for param in self.actor.parameters()]).data,
+									  step, obj_vale,actions,states,advantage_norm.data)
+		else:
+			theta = self.flatten_params([param for param in self.actor.parameters()]).data
 		# why? diagnostics?
-		old_model = copy.deepcopy(self.actor)
-		old_model = old_model.load_state_dict(self.actor.state_dict())
-
+		# old_model = copy.deepcopy(self.actor)
+		# state_save = self.actor.state_dict()
+		# old_model = old_model.load_state_dict(state_save)
+		# old_model = copy.deepcopy(self.actor)
+		# old_model = old_model.load_state_dict(state_save)
+		
+		old_model = self.construct_model_from_theta(self.flatten_params([param.grad for param in self.actor.parameters()]).data)
 		self.actor = self.construct_model_from_theta(theta)
-		kl_old_new = self.kl_divergence(old_model) # for the convenience of debuging.
+		kl_old_new = self.kl_divergence(old_model,states) # for the convenience of debuging.
+		return kl_old_new
 	
 	def save_model(self, path):
-		torch.save(self.target_actor.state_dict(), '{}/actor.pt'.format(path))
-		torch.save(self.target_critic.state_dict(), '{}/critic.pt'.format(path))
+		
+		torch.save(self.actor.state_dict(), '{}/actor.pt'.format(path))
+		torch.save(self.critic.state_dict(), '{}/critic.pt'.format(path))
 		print('Models saved successfully')

@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 # import datetime
-from algo.ddpg import DDPGAgent
+from algo.trpo import TRPOAgent
 # import random
 # from torch.autograd import Variable
 import signal
@@ -70,7 +70,7 @@ def run_episode(env, qf):  # on line algorithm
 		# env.render()
 		state = np.float32(obs)
 		action_ = qf.select_action(state)
-		action_data = action_.cpu().data.numpy()[0] + 2 * noise.sample()  # explotation
+		action_data = action_[0].cpu().data.numpy()[0] + 2 * noise.sample()  # explotation
 		# action_data = action.data.tolist()[0]
 		action = action_data.astype('float32')
 		observation_new, reward, done, info = env.step(action)
@@ -82,13 +82,15 @@ def run_episode(env, qf):  # on line algorithm
 		else:
 			new_state = np.float32(observation_new)
 		# qf.trajectory.append({'reward':reward, 'state':obs, 'action':action,'new_state':obs_new})
-		qf.buffer.append([np.float32(state), np.array(action_data), np.float32(new_state), reward])
+		qf.buffer.append([np.float32(state), np.array(action_data), np.float32(new_state), reward, done])
 		obs = observation_new
-		qf.update()  # picking data from a batch
 		
 		if done:
 			break
 	
+	kl = qf.update(t)  # picking data from a batch
+	# update for each trajectory...the origin code combine several trajectories...
+	print(kl)
 	return add_reward
 
 
@@ -154,7 +156,7 @@ def main():
 	max_clip = env.action_space.high[0]
 	num_episodes = 1000
 	rewards = np.zeros(num_episodes)
-	identity = DDPGAgent.DDPGAgent(obs_dim, act_dim, max_clip, critic='TD', learning_rate=0.001, reward_decay=0.99,
+	identity = TRPOAgent.TRPOAgent(obs_dim, act_dim, max_clip, critic='TD', learning_rate=0.001, reward_decay=0.99,
 								   e_greedy=0.9)
 	for i_episode in range(num_episodes):
 		# env.render()

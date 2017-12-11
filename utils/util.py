@@ -11,11 +11,11 @@ def weights_init(m):
         fan_out = size[0]
         fan_in = size[1]
         variance = np.sqrt(1/(fan_in))
-        # m.weight.data.normal_(0.0, variance)
+        m.weight.data.normal_(0.0, variance)
 
-        m.weight.data.uniform_(-variance,variance)
+        # m.weight.data.uniform_(-variance,variance)
         if(fan_out==1):
-          m.weight.data.uniform_(-0.003,0.003)
+          m.weight.data.uniform_(-0.001,0.001)
         
         
 

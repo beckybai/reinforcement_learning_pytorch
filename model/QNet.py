@@ -254,8 +254,12 @@ class Actor(nn.Module):
 """
 
 class Policy_trpo(nn.Module):
+	
+	# def __init__(self):
+	
 	def __init__(self,state_dim, action_dim,action_lim):
-		super(Policy_trpo).__init__()
+		# super(Policy_trpo)
+		super(Policy_trpo,self).__init__()
 		self.state_dim = state_dim
 		self.action_dim = action_dim
 		self.action_lim = action_lim
@@ -279,6 +283,6 @@ class Policy_trpo(nn.Module):
 		x = F.relu(self.fc1(state))
 		x = F.relu(self.fc2(x))
 		x = F.relu(self.fc3(x))
-		action_mean = F.tanh(self.mean(x))
+		action_mean = F.tanh(self.mean(x)) * self.action_lim
 		action_std = F.softplus(self.variance(x))
 		return action_mean, action_std

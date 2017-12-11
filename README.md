@@ -76,3 +76,9 @@ Good Luck tomorrow. Hope it will not snow.
 Finish the draft version of trpo now.
 
 There is not a good pytorch version of TRPO for the task with continuous action space yet. After understanding every detail of the origin code. I adapted it to a model fitting the task with continuous action space. I will start to debug and write the report tomorrow. 
+
+---20171210---
+
+Working on TRPO.
+
+A very stupid problem: s^T* H * s < 0. The hessian-vector multiplication is abnormal ( extrem large) 
