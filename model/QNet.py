@@ -2,6 +2,16 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch
 import numpy as np
+import torch.nn.init as init
+
+EPS = 0.003
+
+
+def fanin_init(size):
+	fanin =  size[0]
+	v = 1. / np.sqrt(fanin)
+	return torch.Tensor(size).normal_(0,v)
+
 
 """
 QTDAgent
@@ -63,51 +73,38 @@ Output:
 	distribution of a contuous action with normal distribution (\mu, \sigma)
 	Using the reparametric trick later.
 """
+EPS = 0.001
 class ANet_policy(nn.Module):
-	def __init__(self, state_dim, action_dim):
+	def __init__(self, state_dim, action_dim, action_lim):
 		super(ANet_policy,self).__init__()
-		self.h1 = 32
-		self.h2 = 64
-		self.fc1 = nn.Linear(state_dim, self.h1)
-		self.fc2 = nn.Linear(self.h1, self.h2)
-		self.mu = nn.Linear(self.h2, action_dim)
-		self.sigma = nn.Linear(self.h2, action_dim)
-	
-	def forward(self, x):
-		y = F.relu(self.fc1(x))
-		y = F.sigmoid(self.fc2(y))
-		mu = F.tanh(self.mu(y))
-		sigma = F.softplus(self.sigma(y))
-		return mu, sigma
-	
-"""
-DDPGAgent
-Input:
-	state, action
-Output:
-	Q(s,a): scaler
-"""
-class Critic_net_Q(nn.Module):
-	def __init__(self,state_dim, action_dim):
-		super(Critic_net_Q,self).__init__()
+		self.action_lim = action_lim
 		self.h1 = 64
 		self.h2 = 128
-		self.fc1_s = nn.Linear(state_dim, self.h1)
-		self.fc2_s = nn.Linear(self.h1, self.h2)
-		self.fc1_a = nn.Linear(action_dim, self.h1)
-		# self.fc2_a = nn.Linear(self.h1, self.h2)
+		self.fc1 = nn.Linear(state_dim, self.h1)
+		self.fc1.weight.data = fanin_init(self.fc1.weight.data.size())
+
+		self.fc2 = nn.Linear(self.h1, self.h2)
+		self.fc2.weight.data = fanin_init(self.fc2.weight.data.size())
 		
-		self.fc1 = nn.Linear(self.h2 +self.h1, self.h1)
-		self.fc2 = nn.Linear(self.h1, 1)
-		
-	def forward(self, state,action):
-		s1 = F.elu(self.fc1_s(state))
-		s1 = F.elu(self.fc2_s(s1))
-		a1 = F.elu(self.fc1_a(action))
-		# a1 = F.elu(self.fc2_a(a1))
-		y1 = F.elu(self.fc1(torch.cat((s1,a1),dim=1))) # concatinate the feature of action and the state.
-		y1 = (self.fc2(y1))
-		return y1
+		self.fc3 = nn.Linear(self.h2, self.h2)
+		self.fc3.weight.data = fanin_init(self.fc3.weight.data.size())
+
+		self.mu = nn.Linear(self.h2, action_dim)
+		self.mu.weight.data.uniform_(-1/(2*self.h2),1/(2*self.h2))
+
+
+		self.sigma = nn.Linear(self.h2, action_dim)
+		self.sigma.weight.data.uniform_(-1/(2*self.h2),1/(2*self.h2))
+
+	
+	def forward(self, x):
+		y = F.elu(self.fc1(x))
+		y = F.tanh(self.fc2(y))
+		y = F.tanh(self.fc3(y))
+		mu = F.tanh(self.mu(y))*self.action_lim
+		sigma = torch.exp(self.sigma(y))-torch.exp(self.sigma(y))+1
+		return mu, sigma
+	
 
 
 """
@@ -137,71 +134,9 @@ class Actor_policy(nn.Module):
 		y = F.elu(self.fc1(x))
 		y = F.elu(self.fc2(y))
 		y = F.elu(self.fc3(y))
-		y = F.tanh(self.fc4(y))* self.limit
+		y = F.tanh(self.fc4(y))* 2
 		return y
 	
-	
-
-EPS = 0.003
-
-def fanin_init(size, fanin=None):
-	fanin = fanin or size[0]
-	v = 1. / np.sqrt(fanin)
-	return torch.Tensor(size).uniform_(-v, v)
-
-
-"""
-DDPGAgent:
-Critic:
-	Input: state, action
-	Output: value
-Actor:
-	Input: state
-	Ouput: probaility of that action
-"""
-class Critic(nn.Module):
-
-	def __init__(self, state_dim, action_dim):
-		"""
-		:param state_dim: Dimension of input state (int)
-		:param action_dim: Dimension of input action (int)
-		:return:
-		"""
-		super(Critic, self).__init__()
-
-		self.state_dim = state_dim
-		self.action_dim = action_dim
-
-		self.fcs1 = nn.Linear(state_dim,256)
-		self.fcs1.weight.data = fanin_init(self.fcs1.weight.data.size())
-		self.fcs2 = nn.Linear(256,128)
-		self.fcs2.weight.data = fanin_init(self.fcs2.weight.data.size())
-
-		self.fca1 = nn.Linear(action_dim,128)
-		self.fca1.weight.data = fanin_init(self.fca1.weight.data.size())
-
-		self.fc2 = nn.Linear(256,128)
-		self.fc2.weight.data = fanin_init(self.fc2.weight.data.size())
-
-		self.fc3 = nn.Linear(128,1)
-		self.fc3.weight.data.uniform_(-EPS,EPS)
-
-	def forward(self, state, action):
-		"""
-		returns Value function Q(s,a) obtained from critic network
-		:param state: Input state (Torch Variable : [n,state_dim] )
-		:param action: Input Action (Torch Variable : [n,action_dim] )
-		:return: Value function : Q(S,a) (Torch Variable : [n,1] )
-		"""
-		s1 = F.relu(self.fcs1(state))
-		s2 = F.relu(self.fcs2(s1))
-		a1 = F.relu(self.fca1(action))
-		x = torch.cat((s2,a1),dim=1)
-
-		x = F.relu(self.fc2(x))
-		x = self.fc3(x)
-
-		return x
 
 
 class Actor(nn.Module):
@@ -277,12 +212,20 @@ class Policy_trpo(nn.Module):
 		self.mean.weight.data.uniform_(-EPS,EPS)
 		
 		self.variance = nn.Linear(64, action_dim)
-		self.mean.weight.data.uniform_(-EPS,EPS)
+		self.variance.weight.data.uniform_(-EPS,EPS)
+		self.initialize()
+	
+	def initialize(self):
+		init.xavier_uniform(self.fc1.weight)
+		init.xavier_uniform(self.fc2.weight)
+		init.xavier_uniform(self.fc3.weight)
+		init.xavier_uniform(self.mean.weight)
+		init.xavier_uniform(self.variance.weight)
 		
 	def forward(self, state):
 		x = F.relu(self.fc1(state))
 		x = F.relu(self.fc2(x))
 		x = F.relu(self.fc3(x))
-		action_mean = F.tanh(self.mean(x)) * self.action_lim
-		action_std = F.softplus(self.variance(x))
+		action_mean = F.tanh(self.mean(x))
+		action_std = F.softmax(self.variance(x))
 		return action_mean, action_std

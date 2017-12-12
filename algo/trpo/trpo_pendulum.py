@@ -64,7 +64,7 @@ def run_episode(env, qf):  # on line algorithm
 	t = 0
 	MAX_ITER = 1000
 	
-	while (not done) and t < MAX_ITER:
+	while t < MAX_ITER:
 		t += 1
 		# if animate:
 		# env.render()
@@ -86,7 +86,8 @@ def run_episode(env, qf):  # on line algorithm
 		obs = observation_new
 		
 		if done:
-			break
+			obs = env.reset()
+			# break
 	
 	kl = qf.update(t)  # picking data from a batch
 	# update for each trajectory...the origin code combine several trajectories...

@@ -81,4 +81,10 @@ There is not a good pytorch version of TRPO for the task with continuous action 
 
 Working on TRPO.
 
-A very stupid problem: s^T* H * s < 0. The hessian-vector multiplication is abnormal ( extrem large) 
+A very stupid problem: s^T* H * s < 0. The hessian-vector multiplication is abnormal ( extrem large)
+
+---20171211---
+
+TRPO still has problems.
+
+The origin ac is still oscillate when the critic is TD Value function, TD Q function. And the best value cannot be comparable with DDPG. 

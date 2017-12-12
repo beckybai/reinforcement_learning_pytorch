@@ -23,9 +23,9 @@ class DDPGAgent():
 		self.FloatTensor = torch.cuda.FloatTensor if self.use_cuda else torch.FloatTensor
 		
 		# critic model
-		self.critic = QNet.Critic_net_Q(state_dim=state_dim, action_dim=action_dim)
+		self.critic = VNet.Critic_net_Q(state_dim=state_dim, action_dim=action_dim)
 		# self.critic = QNet.Critic(state_dim=state_dim, action_dim=action_dim)
-		self.target_critic = QNet.Critic_net_Q(state_dim=state_dim, action_dim=action_dim)
+		self.target_critic = VNet.Critic_net_Q(state_dim=state_dim, action_dim=action_dim)
 		# self.target_critic = QNet.Critic(state_dim=state_dim, action_dim=action_dim)
 		
 		self.optim_critic = torch.optim.Adam(self.critic.parameters(),self.lr)

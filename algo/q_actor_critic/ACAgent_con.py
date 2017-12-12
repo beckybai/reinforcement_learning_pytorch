@@ -32,14 +32,16 @@ class ACAgent_con():
 		# Policy Model $Pi$
 		self.actor = ANet_policy(self.state_dim, self.action_dim).cuda() if self.use_cuda else ANet_policy(
 			self.state_dim, self.action_dim)
-		self.optimizer = optim.Adam(self.actor.parameters(), lr=self.lr*0.1)
+		self.optimizer = optim.Adam(self.actor.parameters(), lr=self.lr)
 		# self.scheduler = optim.lr_scheduler.StepLR(self.optimizer, step_size=10000, gamma=0.5) # the learning rate decrease by a factor gamma every 10000 step_size.
-		util.weights_init(self.actor)  # The above is copy from SarsaAgent
+		self.actor.apply(util.weights_init)
+		# util.weights_init(self.actor)  # The above is copy from SarsaAgent
 		
 		# State_Value Function V
 		self.modelV = VNet(self.state_dim, value_dim=1).cuda() if self.use_cuda else VNet(self.state_dim, value_dim=1)
-		self.optimizerV = optim.Adam(self.modelV.parameters(), lr=self.lr * 10)
-		util.weights_init(self.modelV)
+		self.optimizerV = optim.Adam(self.modelV.parameters(), lr=self.lr)
+		# util.weights_init(self.modelV)
+		self.modelV.apply(util.weights_init)
 		self.greedy = False
 		self.trajectory = []
 		# self.critic = 'Advantage' || 'TD(\labmda)Actor-Critic

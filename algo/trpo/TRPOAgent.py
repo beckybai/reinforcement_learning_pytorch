@@ -32,12 +32,12 @@ class TRPOAgent():
 		self.critic = VNet.VNet(state_dim=state_dim)
 		self.optim_critic = torch.optim.Adam(self.critic.parameters(), self.lr)
 		# self.optim_critic = torch.optim.LBFGS(self.critic.parameters(),lr = learning_rate)
-		self.critic.apply(util.weights_init)
+		# self.critic.apply(util.weights_init)
 		
 		# actor model
 		self.actor = QNet.Policy_trpo(state_dim=state_dim, action_dim=action_dim, action_lim=action_lim)
 		# self.optim_actor = torch.optim.Adam(self.actor.parameters(), self.lr)
-		self.actor.apply(util.weights_init)
+		# self.actor.apply(util.weights_init)
 		
 		# cuda
 		self.critic = self.critic.cuda() if self.use_cuda else self.critic
@@ -132,22 +132,30 @@ class TRPOAgent():
 		sample_prob = self.normal_log_density(sample,mean.detach(),std.detach()) # attention here.
 		return sample_prob
 	
-	def kl_divergence(self, model,states):
+	def kl_divergence(self, model,states,discrete=False):
 		"""
 		Returns an estimate of the average KL divergence between a given model and self.actor
 		"""
 		# observations_tensor = torch.cat(
 		# 		[Variable(self.FloatTensor(state)).unsqueeze(0) for state in states])
-		actprob = self.model_wrapper(model,states)
-		# actprob = torch.normal(mean,std)
-		# old_mean, old_std = model()
-		old_actprob = self.model_wrapper(self.actor,states)
+		if(discrete):
+			actprob = self.model_wrapper(model,states)
+			# actprob = torch.normal(mean,std)
+			# old_mean, old_std = model()
+			old_actprob = self.model_wrapper(self.actor,states)
+			
+			# actprob = model(states)
+			# old_actprob = self.actor(states)
+			# print(torch.cumsum(torch.exp(old_actprob) *(old_actprob - actprob),1).mean())
+			return torch.cumsum(torch.exp(old_actprob) *(old_actprob - actprob),1).mean()
+		else:
+			mean2,std2 = self.actor(states)
+			mean1,std1 = model(states)
+			std1_log = torch.log(std1)
+			std2_log = torch.log(std2)
+			kl = std2_log - std1_log + (std1.pow(2)+ (-mean1+mean2).pow(2))/(2.0*std2.pow(2))-0.5
+			return kl.sum(1,keepdim=True).mean()
 		
-		# actprob = model(states)
-		# old_actprob = self.actor(states)
-		print(torch.mean(torch.exp(old_actprob) * (old_actprob - actprob)))
-		return torch.mean(torch.exp(old_actprob) *(old_actprob - actprob))
-	
 	def hessian_vector_product(self, vector,states):
 		"""
 		Returns the product of the Hessian of the KL divergence and the given vector
@@ -156,8 +164,9 @@ class TRPOAgent():
 		# Estimate hessian vector product using finite differences
 		# Note that this might be possible to calculate analytically in future versions of PyTorch
 		if self.use_finite_differences:
-			r = 1e-6
-			vector_norm = vector.data.norm()
+			r = 1e-4
+			vector_norm = vector.data.norm()+1e-8
+			# vector_norm=1
 			theta = self.flatten_params([param for param in self.actor.parameters()]).data
 			
 			model_plus = self.construct_model_from_theta(theta + r * (vector.data / vector_norm))
@@ -174,7 +183,7 @@ class TRPOAgent():
 			# grad_minus = self.flatten_params([param.grad for param in model_minus.parameters()]).data
 			damping_term = self.cg_damping * vector.data
 			
-			print(vector_norm * ((grad_plus - grad_minus) / (2 * r)) + damping_term)
+			# print(vector_norm * ((grad_plus - grad_minus) / (2 * r)) + damping_term)
 			return vector_norm * ((grad_plus - grad_minus) / (2 * r)) + damping_term
 		else:
 			self.actor.zero_grad()
@@ -198,11 +207,11 @@ class TRPOAgent():
 		rdotr = r.dot(r)
 		for i in range(self.cg_iters):
 			z = self.hessian_vector_product(Variable(p),states).squeeze(0)
-			v = rdotr / p.dot(z)
+			v = rdotr / (p.dot(z)+1e-8)
 			x += v * p.cpu().numpy()
 			r -= v * z
 			newrdotr = r.dot(r)
-			mu = newrdotr / rdotr
+			mu = newrdotr / (rdotr+1e-8)
 			p = r + mu * p
 			rdotr = newrdotr
 			if rdotr < self.residual_tol:
@@ -218,7 +227,7 @@ class TRPOAgent():
 		mu_old, std_old = self.actor(states)
 		prob_old = self.normal_log_density(actions, mu_old, std_old).data
 		
-		return -torch.sum(torch.exp(prob - prob_old) * advantage)
+		return -torch.mean(torch.exp(prob - prob_old) * advantage)
 	
 	def linesearch(self, theta_old, fullstep, expected_improve_rate, actions, states, advantage):
 		model = self.construct_model_from_theta(theta_old)
@@ -278,7 +287,7 @@ class TRPOAgent():
 		value = self.critic(states)
 		advantage = discount_rewards - value # same as REINFORCEAgent, we use the discount_rewards to estimate Q(s,a)
 		advantage_norm = (advantage - torch.mean(advantage))/(torch.std(advantage)+1e-8)
-		print(advantage.mean())
+		# print(advantage.mean())
 		mean_action, std_action = self.actor(states)
 		state_probabilities = self.normal_log_density(actions,mean_action,std_action)
 		# fixed_probabilities = (state_probabilities.data.clone())
@@ -308,13 +317,15 @@ class TRPOAgent():
 		surrogate_objective.backward(create_graph=True)
 		g = self.calc_grad(self.actor) # numpy or common vectors
 		# g[g>1]=0
+		
+		
 		step_direction = Variable(torch.from_numpy(self.conjugate_gradient(g,states))).cuda() if self.use_cuda else\
 			Variable(torch.from_numpy(self.conjugate_gradient(g,states)))
 		
 		# self.optim_actor.step()
 		shs = (step_direction.dot(self.hessian_vector_product(step_direction,states))).cpu().data.numpy()
 		if(shs<0):
-			print('Warn! shs is smaller than zero!')
+			print('Warn! S^T*H*S  is smaller than zero!')
 			return None
 		step = step_direction.data*(np.sqrt(2*self.delta/shs)).astype('float')[0]
 		
@@ -335,6 +346,9 @@ class TRPOAgent():
 		old_model = self.construct_model_from_theta(self.flatten_params([param.grad for param in self.actor.parameters()]).data)
 		self.actor = self.construct_model_from_theta(theta)
 		kl_old_new = self.kl_divergence(old_model,states) # for the convenience of debuging.
+		# if(kl_old_new.data.cpu().numpy()>0.01):
+		# 	self.actor = old_model
+			
 		return kl_old_new
 	
 	def save_model(self, path):
