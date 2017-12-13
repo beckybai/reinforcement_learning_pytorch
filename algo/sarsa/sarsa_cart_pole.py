@@ -70,7 +70,7 @@ def run_episode(env, qf): # on line algorithm
 		steps_done+=1
 		action_new = qf.select_action(obs_new,steps_done)
 		pending.append([obs,action[0,0],rewards, obs_new,action_new[0,0],done])
-		if len(pending)>=6 or done:
+		if len(pending)>=qf.sample_batch_size or done:
 			qf.update(pending)
 			pending = []
 #		qf.update(obs,action[0,0],rewards, obs_new,action_new[0,0],done)

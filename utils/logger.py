@@ -19,3 +19,10 @@ class Logger(object):
         #you might want to specify some extra behavior here.
         pass
 
+
+def logger_init(out_dir,name):
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+        shutil.copyfile(sys.argv[0], out_dir + name)
+    sys.stdout = Logger(out_dir)
+

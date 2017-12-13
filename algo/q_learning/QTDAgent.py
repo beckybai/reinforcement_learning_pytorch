@@ -76,8 +76,10 @@ class QTDAgent(object):
 		# 	param.grad.data.clamp_(-1,1)
 		self.optimizer.step()
 
-	def save_model(self,name):
-		torch.save(self.model,name)
+	def save_model(self,path):
+		torch.save(self.model.state_dict(), '{}QTDAgent.pt'.format(path))
+		# torch.save(self.target_critic.state_dict(), '{}/critic.pt'.format(path))
+		print('Models saved successfully')
 
 	def load_model(self,name):
 		self.model.load_state_dict(name)

@@ -98,11 +98,11 @@ class ANet_policy(nn.Module):
 
 	
 	def forward(self, x):
-		y = F.elu(self.fc1(x))
+		y = F.sigmoid(self.fc1(x))
 		y = F.tanh(self.fc2(y))
 		y = F.tanh(self.fc3(y))
-		mu = F.tanh(self.mu(y))*self.action_lim
-		sigma = torch.exp(self.sigma(y))-torch.exp(self.sigma(y))+1
+		mu = F.tanh(self.mu(y))*2
+		sigma = torch.exp(self.sigma(y))-torch.exp(self.sigma(y))+0.2
 		return mu, sigma
 	
 

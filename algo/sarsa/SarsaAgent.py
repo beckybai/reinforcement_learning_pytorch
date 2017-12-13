@@ -23,9 +23,9 @@ class SarsaAgent(object):
 		self.LongTensor = torch.cuda.LongTensor if use_cuda else torch.LongTensor
 		self.FloatTensor = torch.cuda.FloatTensor if use_cuda else torch.FloatTensor
 		self.model = QNet(self.state_dim, self.action_dim).cuda() if use_cuda else QNet(self.state_dim, self.action_dim)
-
 		self.optimizer = optim.Adam(self.model.parameters(),lr=self.lr)
 		# self.scheduler = optim.lr_scheduler.StepLR(self.optimizer, step_size=10000, gamma=0.5) # the learning rate decrease by a factor gamma every 10000 step_size.
+		self.sample_batch_size = 6
 
 		util.weights_init(self.model)
 

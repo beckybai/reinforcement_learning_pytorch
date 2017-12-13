@@ -4,11 +4,14 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import datetime
-from QTDAgent import QTDAgent
+from algo.q_learning.QTDAgent import QTDAgent
 import random
 from torch.autograd import Variable
 import signal
 import utils.util as util
+import utils.logger as logger
+from datetime import  datetime
+
 
 is_ipython = 'inline' in matplotlib.get_backend()
 if is_ipython:
@@ -78,10 +81,10 @@ def run_episode(env, qf): # on line algorithm
 
 	return reward
 
-def run_policy(env, qf, episodes):
+def run_policy(env, qf, iteration):
 	total_steps = 0
 	reward = []
-	for e in range(episodes):
+	for e in range(iteration):
 		reward.append(run_episode(env,qf))
 
 	return np.mean(reward)
@@ -93,18 +96,21 @@ def main():
 	killer = GracefulKiller()
 	env, obs_dim, act_dim = init_gym(env_name)
 	num_episodes = 300
+	out_dir = '/home/becky/Git/reinforcement_learning_pytorch/log/q_td_{}/'.format(datetime.now())
+	logger.logger_init(out_dir,'q_td.py')
 	rewards = np.zeros(num_episodes)
-	QValue = QTDAgent(obs_dim, act_dim, learning_rate=0.0001,reward_decay = 0.99, e_greedy=0.9)
+	Identity = QTDAgent(obs_dim, act_dim, learning_rate=0.0001,reward_decay = 0.99, e_greedy=0.9)
 	for i_episode in range(num_episodes):
-		rewards[i_episode] = run_policy(env,QValue,episodes=100)
+		rewards[i_episode] = run_policy(env,Identity,iteration=100)
 		print("In episode {}, the reward is {}".format(str(i_episode),str(rewards[i_episode])))
 		if killer.kill_now:
-			now = "sarsa_v3"
-			QValue.save_model(str(now))
+			now = "q_td"
+			Identity.save_model(str(now))
 			break
 	print('game over!')
 	now_name = 'q_td.pt'
-	util.before_exit(model=QValue.model, reward=rewards, now=now_name)
+	util.before_exit(model=Identity.model, reward=rewards, now=now_name)
+	Identity.save_model(out_dir)
 	env.close()
 	env.render(close=True)
 

@@ -8,16 +8,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a544c5d-57b6-4b50-b20b-9e25c6f8f911" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/algo/q_actor_critic/ACAgent_con_td_offline.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/algo/q_actor_critic/ac_countinous2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/algo/ddpg/DDPGAgent.py" afterPath="$PROJECT_DIR$/algo/ddpg/DDPGAgent.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/algo/q_actor_critic/ACAgent_con.py" afterPath="$PROJECT_DIR$/algo/q_actor_critic/ACAgent_con.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/algo/q_actor_critic/ac_continuous.py" afterPath="$PROJECT_DIR$/algo/q_actor_critic/ac_continuous.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/algo/trpo/TRPOAgent.py" afterPath="$PROJECT_DIR$/algo/trpo/TRPOAgent.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/algo/trpo/trpo_pendulum.py" afterPath="$PROJECT_DIR$/algo/trpo/trpo_pendulum.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/algo/ddpg/ddpg_pendulum.py" afterPath="$PROJECT_DIR$/algo/ddpg/ddpg_pendulum.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/algo/q_actor_critic/ACAgent_con_td_offline.py" afterPath="$PROJECT_DIR$/algo/q_actor_critic/ACAgent_con_td_offline.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/algo/q_learning/QTDAgent.py" afterPath="$PROJECT_DIR$/algo/q_learning/QTDAgent.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/algo/q_learning/q_td.py" afterPath="$PROJECT_DIR$/algo/q_learning/q_td.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/algo/sarsa/SarsaAgent.py" afterPath="$PROJECT_DIR$/algo/sarsa/SarsaAgent.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/algo/sarsa/sarsa_cart_pole.py" afterPath="$PROJECT_DIR$/algo/sarsa/sarsa_cart_pole.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/QNet.py" afterPath="$PROJECT_DIR$/model/QNet.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/VNet.py" afterPath="$PROJECT_DIR$/model/VNet.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/logger.py" afterPath="$PROJECT_DIR$/utils/logger.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,7 +25,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$q_td.coverage" NAME="q_td Coverage Results" MODIFIED="1511408238313" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/algo/q_learning" />
+    <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$q_td.coverage" NAME="q_td Coverage Results" MODIFIED="1513150938247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/algo/q_learning" />
     <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$trpo_pendulum.coverage" NAME="trpo_pendulum Coverage Results" MODIFIED="1513029071079" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/algo/trpo" />
     <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$ac_mc.coverage" NAME="ac_mc Coverage Results" MODIFIED="1512195793868" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/algo/q_actor_critic" />
     <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$example__1_.coverage" NAME="example (1) Coverage Results" MODIFIED="1511332425640" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/algo/sarsa" />
@@ -36,8 +34,8 @@
     <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$ddpg_pendulum.coverage" NAME="ddpg_pendulum Coverage Results" MODIFIED="1512960353284" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/algo/ddpg" />
     <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$ac_countinous2.coverage" NAME="ac_countinous2 Coverage Results" MODIFIED="1513060200038" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/algo/q_actor_critic" />
     <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$rldraw.coverage" NAME="rldraw Coverage Results" MODIFIED="1511749110142" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
-    <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$ac_continuous.coverage" NAME="ac_continuous Coverage Results" MODIFIED="1513061652161" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/algo/q_actor_critic" />
-    <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$sarsa_cart_pole.coverage" NAME="sarsa_cart_pole Coverage Results" MODIFIED="1512194024615" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/algo/sarsa" />
+    <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$ac_continuous.coverage" NAME="ac_continuous Coverage Results" MODIFIED="1513136598707" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/algo/q_actor_critic" />
+    <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$sarsa_cart_pole.coverage" NAME="sarsa_cart_pole Coverage Results" MODIFIED="1513151004215" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/algo/sarsa" />
     <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$example.coverage" NAME="example Coverage Results" MODIFIED="1511239440876" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/sarsa" />
     <SUITE FILE_PATH="coverage/reinforcement_learning_pytorch$ACAgent_con_td_offline.coverage" NAME="ACAgent_con_td_offline Coverage Results" MODIFIED="1513032294413" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/algo/q_actor_critic" />
   </component>
@@ -46,58 +44,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
-      <file leaf-file-name="ac_continuous.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/algo/q_actor_critic/ac_continuous.py">
+      <file leaf-file-name="logger.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/utils/logger.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="4" column="12" lean-forward="false" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ac_countinous2.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/algo/q_actor_critic/ac_countinous2.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="518">
-              <caret line="89" column="0" lean-forward="false" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+            <state relative-caret-position="396">
+              <caret line="22" column="30" lean-forward="false" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
               <folding>
-                <element signature="e#0#12#0" expanded="true" />
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="blas.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/torch/autograd/_functions/blas.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ACAgent_con_td_offline.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/algo/q_actor_critic/ACAgent_con_td_offline.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="515">
-              <caret line="279" column="32" lean-forward="true" selection-start-line="279" selection-start-column="32" selection-end-line="279" selection-end-column="32" />
-              <folding>
-                <element signature="e#0#12#0" expanded="true" />
-                <element signature="e#4116#4278#0" expanded="false" />
-                <element signature="e#4321#4500#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="util.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utils/util.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="29" selection-end-column="30" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -105,8 +59,8 @@
       <file leaf-file-name="DDPGAgent.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/algo/ddpg/DDPGAgent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="97" column="45" lean-forward="false" selection-start-line="97" selection-start-column="33" selection-end-line="97" selection-end-column="45" />
+            <state relative-caret-position="397">
+              <caret line="108" column="20" lean-forward="false" selection-start-line="107" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -114,45 +68,81 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="module.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/torch/nn/modules/module.py">
+      <file leaf-file-name="DDPG_Pendulum-v0.png" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/algo/ddpg/DDPG_Pendulum-v0.png">
+          <provider selected="true" editor-type-id="images">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ddpg_pendulum.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/algo/ddpg/ddpg_pendulum.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="223" column="0" lean-forward="false" selection-start-line="223" selection-start-column="0" selection-end-line="223" selection-end-column="0" />
+            <state relative-caret-position="252">
+              <caret line="14" column="30" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pydevd.py" pinned="false" current-in-tab="false">
-        <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="202">
-              <caret line="1025" column="0" lean-forward="false" selection-start-line="1025" selection-start-column="0" selection-end-line="1025" selection-end-column="0" />
-              <folding />
-            </state>
+      <file leaf-file-name="sarsa_td_30000.png" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/algo/sarsa/sarsa_td_30000.png">
+          <provider selected="true" editor-type-id="images">
+            <state />
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VNet.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/VNet.py">
+      <file leaf-file-name="q_td.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/algo/q_learning/q_td.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="546">
-              <caret line="130" column="0" lean-forward="false" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
+            <state relative-caret-position="702">
+              <caret line="42" column="12" lean-forward="false" selection-start-line="42" selection-start-column="12" selection-end-line="42" selection-end-column="12" />
               <folding>
-                <element signature="e#0#21#0" expanded="true" />
+                <element signature="e#0#12#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="QNet.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/QNet.py">
+      <file leaf-file-name="QTDAgent.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/algo/q_learning/QTDAgent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="76" column="17" lean-forward="false" selection-start-line="76" selection-start-column="6" selection-end-line="76" selection-end-column="17" />
+            <state relative-caret-position="342">
+              <caret line="27" column="24" lean-forward="true" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sarsa_cart_pole.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/algo/sarsa/sarsa_cart_pole.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="450">
+              <caret line="109" column="24" lean-forward="false" selection-start-line="109" selection-start-column="24" selection-end-line="109" selection-end-column="24" />
               <folding>
-                <element signature="e#0#21#0" expanded="true" />
+                <element signature="e#0#12#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SarsaAgent.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/algo/sarsa/SarsaAgent.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="54">
+              <caret line="11" column="8" lean-forward="false" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ac_countinous2.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/algo/q_actor_critic/ac_countinous2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2412">
+              <caret line="134" column="15" lean-forward="true" selection-start-line="134" selection-start-column="15" selection-end-line="134" selection-end-column="15" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -169,10 +159,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>calc_grad</find>
-      <find>app</find>
-      <find>detach</find>
-      <find>hessian_vector_product</find>
       <find>conjugate_gradient</find>
       <find>normal_log_density</find>
       <find>shs</find>
@@ -197,8 +183,12 @@
       <find>double</find>
       <find>FloatTensor</find>
       <find>select_action</find>
-      <find>ANet_policy</find>
       <find>cl</find>
+      <find>std</find>
+      <find>ANet_policy</find>
+      <find>logger</find>
+      <find>QValue</find>
+      <find>actor</find>
     </findStrings>
     <replaceStrings>
       <replace>QTDAgent</replace>
@@ -208,6 +198,7 @@
       <replace>actor</replace>
       <replace>DoubleTensor</replace>
       <replace>FloatTensor</replace>
+      <replace>Identity</replace>
       <replace>float64</replace>
     </replaceStrings>
   </component>
@@ -226,9 +217,6 @@
         <option value="$PROJECT_DIR$/algo/sarsa/example.py" />
         <option value="$PROJECT_DIR$/algo/sarsa/Q_function.py" />
         <option value="$PROJECT_DIR$/algo/q_learning/Q_function.py" />
-        <option value="$PROJECT_DIR$/algo/q_learning/q_td.py" />
-        <option value="$PROJECT_DIR$/algo/q_learning/QTDAgent.py" />
-        <option value="$PROJECT_DIR$/algo/sarsa/sarsa_cart_pole.py" />
         <option value="$PROJECT_DIR$/algo/reinforce/REINFORCE_cart_pole.py" />
         <option value="$PROJECT_DIR$/utils/rldraw.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
@@ -237,8 +225,6 @@
         <option value="$PROJECT_DIR$/algo/q_actor_critic/ACAgent.py" />
         <option value="$PROJECT_DIR$/algo/q_actor_critic/ac_main.py" />
         <option value="$PROJECT_DIR$/utils/ActionNoise.py" />
-        <option value="$PROJECT_DIR$/algo/ddpg/ddpg_pendulum.py" />
-        <option value="$PROJECT_DIR$/algo/sarsa/SarsaAgent.py" />
         <option value="$PROJECT_DIR$/algo/trpo/trpo_update.py" />
         <option value="$PROJECT_DIR$/algo/reinforce/REINFORCEAgent.py" />
         <option value="$PROJECT_DIR$/utils/buffer.py" />
@@ -252,6 +238,12 @@
         <option value="$PROJECT_DIR$/algo/q_actor_critic/ac_continuous.py" />
         <option value="$PROJECT_DIR$/model/QNet.py" />
         <option value="$PROJECT_DIR$/algo/q_actor_critic/ACAgent_con_td_offline.py" />
+        <option value="$PROJECT_DIR$/algo/sarsa/sarsa_cart_pole.py" />
+        <option value="$PROJECT_DIR$/algo/sarsa/SarsaAgent.py" />
+        <option value="$PROJECT_DIR$/utils/logger.py" />
+        <option value="$PROJECT_DIR$/algo/ddpg/ddpg_pendulum.py" />
+        <option value="$PROJECT_DIR$/algo/q_learning/QTDAgent.py" />
+        <option value="$PROJECT_DIR$/algo/q_learning/q_td.py" />
       </list>
     </option>
   </component>
@@ -310,6 +302,12 @@
               <item name="reinforcement_learning_pytorch" type="b2602c69:ProjectViewProjectNode" />
               <item name="reinforcement_learning_pytorch" type="462c0819:PsiDirectoryNode" />
               <item name="algo" type="462c0819:PsiDirectoryNode" />
+              <item name="q_learning" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="reinforcement_learning_pytorch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="reinforcement_learning_pytorch" type="462c0819:PsiDirectoryNode" />
+              <item name="algo" type="462c0819:PsiDirectoryNode" />
               <item name="sarsa" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -363,7 +361,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.ac_countinous2">
+  <component name="RunManager" selected="Python.sarsa_cart_pole">
     <configuration name="ACAgent_con_td_offline" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -378,24 +376,6 @@
       <module name="reinforcement_learning_pytorch" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/algo/q_actor_critic/ACAgent_con_td_offline.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
-    <configuration name="TRPOAgent" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/algo/trpo" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="reinforcement_learning_pytorch" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/algo/trpo/TRPOAgent.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -649,20 +629,38 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
-    <configuration name="ddpg_pendulum" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="q_td" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/algo/ddpg" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/algo/q_learning" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="reinforcement_learning_pytorch" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/algo/ddpg/ddpg_pendulum.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/algo/q_learning/q_td.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
+    <configuration name="sarsa_cart_pole" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/algo/sarsa" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="reinforcement_learning_pytorch" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/algo/sarsa/sarsa_cart_pole.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -687,18 +685,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.ac_continuous" />
-      <item index="1" class="java.lang.String" itemvalue="Python.ddpg_pendulum" />
-      <item index="2" class="java.lang.String" itemvalue="Python.trpo_pendulum" />
-      <item index="3" class="java.lang.String" itemvalue="Python.TRPOAgent" />
-      <item index="4" class="java.lang.String" itemvalue="Python.ac_countinous2" />
+      <item index="1" class="java.lang.String" itemvalue="Python.trpo_pendulum" />
+      <item index="2" class="java.lang.String" itemvalue="Python.ac_countinous2" />
+      <item index="3" class="java.lang.String" itemvalue="Python.sarsa_cart_pole" />
+      <item index="4" class="java.lang.String" itemvalue="Python.q_td" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.ac_continuous" />
-        <item index="1" class="java.lang.String" itemvalue="Python.ac_countinous2" />
-        <item index="2" class="java.lang.String" itemvalue="Python.trpo_pendulum" />
-        <item index="3" class="java.lang.String" itemvalue="Python.TRPOAgent" />
-        <item index="4" class="java.lang.String" itemvalue="Python.ddpg_pendulum" />
+        <item index="0" class="java.lang.String" itemvalue="Python.sarsa_cart_pole" />
+        <item index="1" class="java.lang.String" itemvalue="Python.q_td" />
+        <item index="2" class="java.lang.String" itemvalue="Python.ac_continuous" />
+        <item index="3" class="java.lang.String" itemvalue="Python.ac_countinous2" />
+        <item index="4" class="java.lang.String" itemvalue="Python.trpo_pendulum" />
       </list>
     </recent_temporary>
   </component>
@@ -722,7 +720,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27958116" sideWeight="0.51077944" order="7" side_tool="true" content_ui="tabs" />
@@ -734,7 +731,7 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498618" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498618" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3329843" sideWeight="0.48922056" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30575916" sideWeight="0.48922056" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -766,15 +763,20 @@
           <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/algo/q_learning/q_td.py</url>
-          <line>106</line>
-          <option name="timeStamp" value="36" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <dependency master-id="0" />
           <url>file://$PROJECT_DIR$/algo/q_learning/QTDAgent.py</url>
           <line>71</line>
           <option name="timeStamp" value="49" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/algo/q_actor_critic/ACAgent_con_td_offline.py</url>
+          <line>167</line>
+          <option name="timeStamp" value="229" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/algo/q_actor_critic/ACAgent_con_td_offline.py</url>
+          <line>287</line>
+          <option name="timeStamp" value="231" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -788,12 +790,11 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="226" />
+      <option name="time" value="232" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/algo/q_learning/q_mc.py" />
     <entry file="file://$PROJECT_DIR$/algo/sarsa/example.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="209">
@@ -813,13 +814,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-406">
           <caret line="494" column="3" lean-forward="false" selection-start-line="494" selection-start-column="3" selection-end-line="494" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/algo/q_learning/q_mc_cart_pole.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -843,13 +837,6 @@
     <entry file="file://$PROJECT_DIR$/log/REINFORCEMENT_2017-11-23 01:46:55.845912/out_dirhaha2.jpg">
       <provider selected="true" editor-type-id="images">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/algo/q_learning/q_lsmc_cart_pole.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-        </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/torch/__init__.py">
@@ -912,60 +899,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/algo/q_learning/q_td.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="71" column="27" lean-forward="false" selection-start-line="71" selection-start-column="24" selection-end-line="71" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/algo/sarsa/sarsa_td_30000.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/algo/sarsa/sarsa_cart_pole.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="98" column="43" lean-forward="false" selection-start-line="98" selection-start-column="40" selection-end-line="98" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/algo/q_learning/QTDAgent.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="66" column="80" lean-forward="false" selection-start-line="66" selection-start-column="59" selection-end-line="66" selection-end-column="80" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/algo/trpo/trpo_update.py" />
-    <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/numpy/core/fromnumeric.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="2905" column="0" lean-forward="false" selection-start-line="2905" selection-start-column="0" selection-end-line="2905" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/torch/autograd/stochastic_function.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
           <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/torch/autograd/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="97" column="0" lean-forward="false" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -991,33 +929,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/algo/q_actor_critic/ACAgent.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="91" column="30" lean-forward="false" selection-start-line="91" selection-start-column="30" selection-end-line="91" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/algo/q_actor_critic/ACAgent_con.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1062">
           <caret line="65" column="33" lean-forward="false" selection-start-line="65" selection-start-column="33" selection-end-line="65" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/logger.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/algo/sarsa/SarsaAgent.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1206">
-          <caret line="75" column="30" lean-forward="false" selection-start-line="59" selection-start-column="27" selection-end-line="75" selection-end-column="30" />
           <folding />
         </state>
       </provider>
@@ -1028,21 +943,6 @@
           <caret line="81" column="44" lean-forward="false" selection-start-line="81" selection-start-column="37" selection-end-line="81" selection-end-column="44" />
           <folding>
             <element signature="e#0#12#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/algo/ddpg/DDPG_Pendulum-v0.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/algo/ddpg/ddpg_pendulum.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="81" column="0" lean-forward="false" selection-start-line="76" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1092,7 +992,7 @@
         <state relative-caret-position="285">
           <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding>
-            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#0#29#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1123,34 +1023,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/algo/q_actor_critic/ac_countinous2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="89" column="0" lean-forward="false" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/algo/ddpg/DDPGAgent.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="97" column="45" lean-forward="false" selection-start-line="97" selection-start-column="33" selection-end-line="97" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="29" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/torch/nn/modules/module.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
@@ -1159,32 +1031,174 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/torch/autograd/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/numpy/core/fromnumeric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="2905" column="0" lean-forward="false" selection-start-line="2905" selection-start-column="0" selection-end-line="2905" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/torch/serialization.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-165">
+          <caret line="117" column="0" lean-forward="false" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/model/QNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="76" column="17" lean-forward="false" selection-start-line="76" selection-start-column="6" selection-end-line="76" selection-end-column="17" />
+        <state relative-caret-position="241">
+          <caret line="121" column="18" lean-forward="false" selection-start-line="121" selection-start-column="6" selection-end-line="121" selection-end-column="18" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/algo/q_actor_critic/ac_continuous.py">
+    <entry file="file://$PROJECT_DIR$/algo/q_actor_critic/ACAgent.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="4" column="12" lean-forward="false" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+        <state relative-caret-position="450">
+          <caret line="124" column="84" lean-forward="false" selection-start-line="124" selection-start-column="74" selection-end-line="124" selection-end-column="84" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/algo/q_actor_critic/ACAgent_con_td_offline.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="515">
-          <caret line="279" column="32" lean-forward="true" selection-start-line="279" selection-start-column="32" selection-end-line="279" selection-end-column="32" />
+        <state relative-caret-position="756">
+          <caret line="42" column="50" lean-forward="false" selection-start-line="42" selection-start-column="50" selection-end-line="42" selection-end-column="50" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
-            <element signature="e#4116#4278#0" expanded="false" />
-            <element signature="e#4321#4500#0" expanded="false" />
+            <element signature="e#4266#4428#0" expanded="false" />
+            <element signature="e#4471#4650#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algo/q_actor_critic/ac_continuous.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="116">
+          <caret line="114" column="22" lean-forward="false" selection-start-line="114" selection-start-column="19" selection-end-line="114" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#12#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algo/q_learning/q_lsmc_cart_pole.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algo/q_learning/q_mc_cart_pole.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="29" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/logger.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="22" column="30" lean-forward="false" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algo/ddpg/DDPG_Pendulum-v0.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algo/ddpg/ddpg_pendulum.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="14" column="30" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algo/sarsa/sarsa_td_30000.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algo/q_learning/q_td.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="702">
+          <caret line="42" column="12" lean-forward="false" selection-start-line="42" selection-start-column="12" selection-end-line="42" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algo/ddpg/DDPGAgent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="397">
+          <caret line="108" column="20" lean-forward="false" selection-start-line="107" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algo/sarsa/sarsa_cart_pole.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="109" column="24" lean-forward="false" selection-start-line="109" selection-start-column="24" selection-end-line="109" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algo/q_learning/QTDAgent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="27" column="24" lean-forward="true" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algo/sarsa/SarsaAgent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="11" column="8" lean-forward="false" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algo/q_actor_critic/ac_countinous2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2412">
+          <caret line="134" column="15" lean-forward="true" selection-start-line="134" selection-start-column="15" selection-end-line="134" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
           </folding>
         </state>
       </provider>

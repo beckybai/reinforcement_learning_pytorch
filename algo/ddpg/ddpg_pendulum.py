@@ -108,11 +108,8 @@ def main():
 	torch.cuda.manual_seed(seed_num)
 	# buffer
 #	data_dir = '/home/bike/data/mnist/'
-	out_dir = '/home/becky/Git/reinforcement_learning_pytorch/log/AC_conti_{}/'.format(datetime.now())
-	if not os.path.exists(out_dir):
-		os.makedirs(out_dir)
-		shutil.copyfile(sys.argv[0], out_dir + '/TD_pendulum_v0.py')
-	sys.stdout = logger.Logger(out_dir)
+	out_dir = '/home/becky/Git/reinforcement_learning_pytorch/log/ddpg_{}/'.format(datetime.now())
+	logger.logger_init(out_dir=out_dir,name='ddpg_pendulum.py')
 	env_name = 'Pendulum-v0'
 	killer = GracefulKiller()
 	env, obs_dim, act_dim = init_gym(env_name)
@@ -127,7 +124,7 @@ def main():
 		print("In episode {}, the reward is {}".format(str(i_episode),str(rewards[i_episode])))
 		gc.collect()
 		if killer.kill_now:
-			now = "dddpg_conti_TD_v0"
+			now = "ddpg_conti_TD_v0"
 			identity.save_model(out_dir)
 			break
 

@@ -20,7 +20,7 @@ class ACAgent_con():
 		print(torch.cuda.current_device())
 		self.action_dim = action_dim
 		self.state_dim = state_dim
-		self.lr = 0.0005
+		self.lr = 0.001
 		# self.reward_dacy = reward_decay
 		self.gamma = 0.95  # in according to the parameters in the formulation.
 		self.epsilon = e_greedy
@@ -36,6 +36,8 @@ class ACAgent_con():
 		
 		"""Model part"""
 		# Policy Model $Pi$
+		self.actor = QNet.Actor_policy(state_dim=state_dim, action_dim=action_dim, action_lim= self.max_clip)
+		# self.actor = self.actor.cuda() if self.use
 		self.actor = ANet_policy(self.state_dim, self.action_dim,self.max_clip).cuda() if self.use_cuda else ANet_policy(
 				self.state_dim, self.action_dim,self.max_clip)
 		self.optim_actor = optim.Adam(self.actor.parameters(), lr=self.lr)
@@ -257,8 +259,9 @@ class ACAgent_con():
 			predicted = torch.squeeze(
 				rewards + self.gamma * self.critic(next_states).detach()).detach()
 			
-			real = torch.squeeze(self.critic(states))
-			critic_loss = F.smooth_l1_loss(real, predicted)
+			real = (self.critic(states))
+			delta = (predicted-real).detach()
+			critic_loss = -torch.mean(delta*real)
 			self.optim_critic.zero_grad()
 			critic_loss.backward()
 			self.optim_critic.step()
@@ -277,7 +280,7 @@ class ACAgent_con():
 			prob = self.normal_log_density(sampled_action,mu,std)
 			real = torch.squeeze(self.critic(states))
 			# actor_loss = torch.mean(-prob*(dis_reward.detach()-real.detach()))  # maximum the q function
-			actor_loss = torch.mean(prob*(real.detach()))  # maximum the q function
+			actor_loss = torch.mean(-prob*(real.detach()))  # maximum the q function
 			# advantage function
 			self.optim_actor.zero_grad()
 			# print(actor_loss)
