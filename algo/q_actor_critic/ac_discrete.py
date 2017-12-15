@@ -32,7 +32,9 @@ class GracefulKiller:
 
 # gym parameters
 def init_gym(env_name):
-	env = gym.make(env_name).unwrapped
+	
+	# env = gym.make(env_name).unwrapped
+	env = gym.make(env_name)
 	state_dim = env.observation_space.shape[0]
 	disc_flag = len(env.action_space.shape)==0
 	if disc_flag: # discrete action
@@ -81,7 +83,7 @@ def run_policy(env, qf, episodes):
 		qf.update() # update the policy net
 		qf.clear_trajectory() # clear the old trajectory
 
-	return np.mean(reward)
+	return np.mean(reward), np.var(reward)
 	# print(np.mean(reward))
 	# return reward
 
@@ -94,17 +96,18 @@ def main():
 	out_dir = '/home/becky/Git/reinforcement_learning_pytorch/log/AC_MC_{}/'.format(datetime.now())
 	if not os.path.exists(out_dir):
 		os.makedirs(out_dir)
-		shutil.copyfile(sys.argv[0], out_dir + '/REINFORCE_cart_pole.py')
+		shutil.copyfile(sys.argv[0], out_dir + '/AC_cart_pole.py')
 	sys.stdout = logger.Logger(out_dir)
 	env_name = 'CartPole-v0'
 	killer = GracefulKiller()
 	env, obs_dim, act_dim = init_gym(env_name)
 	num_episodes = 300
 	rewards = np.zeros(num_episodes)
+	var_rewards = np.zeros(num_episodes)
 	QValue = ACAgent(obs_dim, act_dim, critic='TD', learning_rate=0.0001,reward_decay = 0.99, e_greedy=0.9)
 	for i_episode in range(num_episodes):
-		rewards[i_episode] = run_policy(env,QValue,episodes=100)
-		print("In episode {}, the reward is {}".format(str(i_episode),str(rewards[i_episode])))
+		rewards[i_episode],var_rewards[i_episode] = run_policy(env,QValue,episodes=100)
+		print("In episode {}, the reward is {}, the variance is {}".format(str(i_episode),str(rewards[i_episode])),str(var_rewards[i_episode]))
 		if killer.kill_now:
 			now = "AC_TD_v1"
 			QValue.save_model(str(now))

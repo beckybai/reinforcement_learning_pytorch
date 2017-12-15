@@ -92,12 +92,12 @@ def run_episode(env, qf):  # on line algorithm
 def run_policy(env, qf, episodes):
 	total_steps = 0
 	reward = []
-	for e in range(1):
+	for e in range(100):
 		reward.append(run_episode(env, qf))
 		# qf.update() # update the policy net
 		qf.clear_trajectory()  # clear the old trajectory
 	
-	return np.mean(reward)
+	return np.mean(reward),np.var(reward)
 
 
 # print(np.mean(reward))
@@ -120,11 +120,12 @@ def main():
 	max_clip = env.action_space.high[0]
 	num_episodes = 300
 	rewards = np.zeros(num_episodes)
+	reward_variance = np.zeros(num_episodes)
 	identity = ACAgent_con(obs_dim, act_dim, max_clip, critic_class='Q', learning_rate=0.0001, reward_decay=0.99,
 						   e_greedy=0.9)
 	for i_episode in range(num_episodes):
-		rewards[i_episode] = run_policy(env, identity, episodes=100)
-		print("In episode {}, the reward is {}".format(str(i_episode), str(rewards[i_episode])))
+		rewards[i_episode], reward_variance[i_episode] = run_policy(env, identity, episodes=100)
+		print("In episode {}, the reward is {}, the variance is {}".format(str(i_episode), str(rewards[i_episode]),str(reward_variance[i_episode])))
 		if killer.kill_now:
 			now = "AC_conti_TD_v0"
 			identity.save_model(str(now))

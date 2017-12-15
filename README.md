@@ -2,6 +2,13 @@
 some basic implementations of algorithms in reinforcement learning in pytorch.
 
 
+All the algorithms are in the "algo" category. The neural network can be found in "model" part.
+
+In order to read easily and debug easily, every algorithm has its independent Agent and its playground(the interaction with the environment), so some functions may be repeatative. When finishing all the necessary algorithm, I will rebuild the whole structure. Different agents inheritant from a public agent.
+
+
+
+
 
 ## Submit Dairy
 

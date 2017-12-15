@@ -37,7 +37,8 @@ class GracefulKiller:
 
 # gym parameters
 def init_gym(env_name):
-	env = gym.make(env_name).unwrapped
+	# env = gym.make(env_name).unwrapped
+	env = gym.make(env_name)
 	state_dim = env.observation_space.shape[0]
 	disc_flag = len(env.action_space.shape)==0
 	if disc_flag: # discrete action
@@ -87,7 +88,7 @@ def run_policy(env, qf, iteration):
 	for e in range(iteration):
 		reward.append(run_episode(env,qf))
 
-	return np.mean(reward)
+	return np.mean(reward), np.var(reward)
 	# print(np.mean(reward))
 	# return reward
 
@@ -99,10 +100,11 @@ def main():
 	out_dir = '/home/becky/Git/reinforcement_learning_pytorch/log/q_td_{}/'.format(datetime.now())
 	logger.logger_init(out_dir,'q_td.py')
 	rewards = np.zeros(num_episodes)
+	rewards_variance = np.zeros(num_episodes)
 	Identity = QTDAgent(obs_dim, act_dim, learning_rate=0.0001,reward_decay = 0.99, e_greedy=0.9)
 	for i_episode in range(num_episodes):
-		rewards[i_episode] = run_policy(env,Identity,iteration=100)
-		print("In episode {}, the reward is {}".format(str(i_episode),str(rewards[i_episode])))
+		rewards[i_episode],rewards_variance[i_episode] = run_policy(env,Identity,iteration=100)
+		print("In episode {}, the reward is {}, the variance is {}".format(str(i_episode),str(rewards[i_episode]),str(rewards_variance[i_episode])))
 		if killer.kill_now:
 			now = "q_td"
 			Identity.save_model(str(now))

@@ -37,7 +37,8 @@ class GracefulKiller:
 
 # gym parameters
 def init_gym(env_name):
-	env = gym.make(env_name).unwrapped
+	# env = gym.make(env_name).unwrapped
+	env = gym.make(env_name)
 	state_dim = env.observation_space.shape[0]
 	disc_flag = len(env.action_space.shape)==0
 	if disc_flag: # discrete action
@@ -95,7 +96,7 @@ def run_policy(env, qf, episodes):
 		qf.update() # update the policy net
 		qf.clear_trajectory() # clear the old trajectory
 
-	return np.mean(reward)
+	return np.mean(reward), np.var(reward)
 	# print(np.mean(reward))
 	# return reward
 
@@ -116,9 +117,10 @@ def main():
 	env, obs_dim, act_dim = init_gym(env_name)
 	num_episodes = 300
 	rewards = np.zeros(num_episodes)
+	rewards_variance = np.zeros(num_episodes)
 	QValue = REINFORCEAgent(obs_dim, act_dim, learning_rate=0.0001,reward_decay = 0.99, e_greedy=0.9)
 	for i_episode in range(num_episodes):
-		rewards[i_episode] = run_policy(env,QValue,episodes=100)
+		rewards[i_episode],rewards_variance[i_episode] = run_policy(env,QValue,episodes=100)
 		print("In episode {}, the reward is {}".format(str(i_episode),str(rewards[i_episode])))
 		if killer.kill_now:
 			# now = "REINFORCE_v1"
